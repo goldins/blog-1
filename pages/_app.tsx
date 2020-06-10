@@ -5,6 +5,7 @@ import { Container } from '../components/Container';
 import { defaultTheme } from '../styles/defaultTheme';
 import { Global } from '@emotion/core';
 import normalize from '../styles/normalize';
+import { SiteHead } from '../components/SiteHead';
 
 interface AppProps {
   Component: () => React.ReactElement;
@@ -15,6 +16,8 @@ interface AppProps {
 export default ({ Component, pageProps }: AppProps) => {
   return (
     <Container>
+      <SiteHead />
+
       <ThemeProvider theme={defaultTheme}>
         <Global styles={normalize(defaultTheme)} />
         <Component {...pageProps} />

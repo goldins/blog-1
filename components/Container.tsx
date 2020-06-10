@@ -2,7 +2,6 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 
 const Section = styled.section(() => ({
-  minHeight: '100vh',
   padding: '0 0.5rem',
   display: 'flex',
   flexDirection: 'column',
@@ -17,3 +16,13 @@ export const Container = (props: React.PropsWithChildren<Record<string, unknown>
     </Section>
   );
 };
+
+const VerticalSection = styled(Section)`
+  min-height: 100vh;
+`;
+
+export const VerticalContainer = (props: React.PropsWithChildren<Record<string, unknown>>) => (
+  <VerticalSection>
+    <main>{props.children}</main>
+  </VerticalSection>
+);

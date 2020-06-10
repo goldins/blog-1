@@ -1,3 +1,5 @@
+import facepaint from 'facepaint';
+
 const colors = {
   brand: '#2230c1',
   accent: '#ffb238',
@@ -65,13 +67,16 @@ const heights = {
   header: 60
 };
 
+const mq = facepaint(Object.values(breakpoints).map((bp) => `@media (min-width: ${bp}px)`));
+
 export const defaultTheme = {
   colors,
   fonts,
   breakpoints,
   widths,
   dimensions,
-  heights
+  heights,
+  mq
 };
 
 export type Theme = typeof defaultTheme;

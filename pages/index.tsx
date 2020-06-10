@@ -1,12 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import Link from 'next/link';
-import { useTheme } from 'emotion-theming';
-import { Global } from '@emotion/core';
-
-import { SiteHead } from '../components/SiteHead';
-import normalize from '../styles/normalize';
-import { Theme } from '../styles/defaultTheme';
 
 const Container = styled.div(() => ({
   minHeight: '100vh',
@@ -40,13 +34,8 @@ const Footer = styled.footer(() => ({
 }));
 
 export default () => {
-  const theme = useTheme<Theme>();
-
   return (
     <Container>
-      <Global styles={normalize(theme)} />
-      <SiteHead />
-
       <main>
         <H1>Simon.Goldin</H1>
       </main>

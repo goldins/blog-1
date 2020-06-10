@@ -5,15 +5,10 @@ export default (theme: Theme) => `
     box-sizing: border-box;
   }
 
-  *,
-  *::before,
-  *::after {
-    box-sizing: inherit;
-  }
-
   html {
     font-size: ${theme.dimensions.fontSize.regular}px !important;
     line-height: ${theme.dimensions.lineHeight.regular} !important;
+    touch-action: manipulation;
   }
 
   body {

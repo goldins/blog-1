@@ -48,10 +48,6 @@ interface FormProps {
 export const Form = ({ onSubmit }: FormProps) => {
   const [values, setValues] = React.useState<FormValues>({ value1: '' });
 
-  const resetValues = () => {
-    setValues({ value1: '' });
-  };
-
   // todo: abstraction
   const onDrop: InputDragEventHandler = (e) => {
     if (e.currentTarget) {
@@ -95,10 +91,6 @@ export const Form = ({ onSubmit }: FormProps) => {
         readOnly
       />
       <StyledButton type="submit">Submit</StyledButton>
-      {/* todo: replace with backspace? */}
-      <StyledButton type="button" onClick={resetValues}>
-        Clear
-      </StyledButton>
     </StyledForm>
   );
 };
