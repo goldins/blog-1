@@ -8,6 +8,7 @@ export default () => {
   };
   return (
     <>
+      <h2>Drag and Drop Keyboard</h2>
       <Form onSubmit={onSubmit} />
       <Keyboard />
     </>
