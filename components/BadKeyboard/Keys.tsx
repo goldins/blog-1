@@ -7,8 +7,7 @@ import { Theme } from '../../styles/defaultTheme';
 const StyledKey = styled.div(({ highlight, theme }: { highlight?: boolean; theme: Theme }) => ({
   margin: 3,
   color: theme.colors.brand,
-  width: `2rem`,
-  height: `2rem`,
+  padding: `1rem`,
   borderWidth: 1,
   borderColor: highlight ? theme.colors.brand : theme.colors.gray.calm,
   borderStyle: 'solid',
@@ -31,11 +30,10 @@ const StyledKey = styled.div(({ highlight, theme }: { highlight?: boolean; theme
 }));
 
 const charKeyDragEnd: DragEventHandler<HTMLElement> = (e) => {
-  e.currentTarget.style.borderStyle = 'solid';
+  e.currentTarget.style.borderStyle = '';
 };
 
 const charKeyDragStart: (v: string) => DragEventHandler<HTMLElement> = (v) => (e) => {
-  e.currentTarget.style.borderStyle = 'dashed';
   e.dataTransfer.setData('text/plain', v);
 };
 

@@ -41,7 +41,7 @@ export const Keyboard = () => {
 
   const onDragLeave: DragEventHandler<HTMLElement> = (e) => {
     if (shiftDrag) {
-      e.currentTarget.style.borderStyle = 'solid';
+      e.currentTarget.style.borderStyle = '';
     }
   };
 
