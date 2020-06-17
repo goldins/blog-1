@@ -1,4 +1,4 @@
-import React, { DragEventHandler } from 'react';
+import React from 'react';
 import styled from '@emotion/styled';
 import { Theme } from '../../styles/defaultTheme';
 
@@ -29,23 +29,13 @@ type FormValues = {
   value1: string;
 };
 
-type InputDragEventHandler = DragEventHandler<HTMLInputElement>;
+type InputDragEventHandler = React.DragEventHandler<HTMLInputElement>;
 
-const onDragEnter: InputDragEventHandler = (e) => {
-  e.currentTarget.style.borderStyle = 'dashed';
-  e.currentTarget.removeAttribute('readonly');
-};
+export const Form = () => {
+  const onSubmit = (message: string) => {
+    alert(message);
+  };
 
-const onDragLeave: InputDragEventHandler = (e) => {
-  e.currentTarget.style.borderStyle = 'solid';
-  e.currentTarget.setAttribute('readonly', '');
-};
-
-interface FormProps {
-  onSubmit: (v: string) => void;
-}
-
-export const Form = ({ onSubmit }: FormProps) => {
   const [values, setValues] = React.useState<FormValues>({ value1: '' });
 
   // todo: abstraction
@@ -82,14 +72,7 @@ export const Form = ({ onSubmit }: FormProps) => {
       }}
       noValidate
     >
-      <StyledInput
-        type="text"
-        onDrop={onDrop}
-        onDragLeave={onDragLeave}
-        onDragEnter={onDragEnter}
-        value={values.value1}
-        readOnly
-      />
+      <StyledInput type="text" onDrop={onDrop} value={values.value1} readOnly />
       <StyledButton type="submit">Submit</StyledButton>
     </StyledForm>
   );

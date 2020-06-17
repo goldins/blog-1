@@ -1,106 +1,81 @@
-import React, { DragEventHandler } from 'react';
+import React from 'react';
 import { transparentize } from 'polished';
 import styled from '@emotion/styled';
 
 import { Theme } from '../../styles/defaultTheme';
 
-const StyledKey = styled.div(({ highlight, theme }: { highlight?: boolean; theme: Theme }) => ({
-  margin: 3,
-  color: theme.colors.brand,
-  padding: `1rem`,
-  borderWidth: 1,
-  borderColor: highlight ? theme.colors.brand : theme.colors.gray.calm,
-  borderStyle: 'solid',
-  fontSize: `1rem`,
-  borderRadius: theme.dimensions.borderRadii.regular,
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  '&:hover': {
-    cursor: 'pointer'
-  },
-  '&:active': {
-    backgroundColor: transparentize(0.45, theme.colors.gray.calm)
-  },
-  [`@media(min-width: ${theme.breakpoints.sm}px)`]: {
-    width: `2.5rem`,
-    height: `2.5rem`,
-    fontSize: `1.15rem`
-  }
-}));
+interface StyledKeyProps {
+  isActive?: boolean;
+  highlight?: boolean;
+  unitWidth?: number;
+  theme: Theme;
+}
 
-const charKeyDragEnd: DragEventHandler<HTMLElement> = (e) => {
-  e.currentTarget.style.borderStyle = '';
-};
+const StyledKey = styled.div(({ isActive = false, unitWidth = 1, theme }: StyledKeyProps) => {
+  // 44/16 = 2.75
+  const height = 2.75;
+  return {
+    margin: 3,
+    color: isActive ? theme.colors.accent : theme.colors.brand,
+    height: `${height}rem`,
+    minWidth: `${height * unitWidth}rem`,
+    borderWidth: 1,
+    borderColor: isActive ? theme.colors.accent : theme.colors.brand,
+    borderStyle: 'solid',
+    fontSize: `${height * 0.4}rem`,
+    borderRadius: theme.dimensions.borderRadii.regular,
+    fontFamily: theme.fonts.monospace,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: `${isActive ? transparentize(0.45, theme.colors.gray.calm) : 'transparent'}`,
+    '&:hover': {
+      cursor: 'pointer'
+    },
+    '&:active': {
+      backgroundColor: transparentize(0.45, theme.colors.gray.calm)
+    },
+    '& div': {
+      width: '100%',
+      lineHeight: `${height}rem`,
+      textAlign: 'center',
+      padding: `0 ${Math.round(height / 4)}rem`
+    },
+    [`@media(max-width: ${theme.breakpoints.sm}px)`]: {
+      height: `${height}rem`,
+      minWidth: `${height * unitWidth}rem`,
+      fontSize: `${height / 3}rem`,
+      margin: 1
+    }
+  };
+});
 
-const charKeyDragStart: (v: string) => DragEventHandler<HTMLElement> = (v) => (e) => {
-  e.dataTransfer.setData('text/plain', v);
-};
+interface CharKeyProps extends React.DOMAttributes<HTMLSpanElement> {
+  isActive?: boolean;
+  highlight?: boolean;
+  unitWidth?: number;
+}
 
-export const CharKey = ({
-  showDroppable,
-  children,
-  value,
-  onDragEnter,
-  onDragLeave,
-  onDrop,
-  onDragEnd
-}: {
-  showDroppable?: boolean;
-  children: string;
-  value?: string;
-  onDragEnter?: DragEventHandler<HTMLElement>;
-  onDragLeave?: DragEventHandler<HTMLElement>;
-  onDrop?: DragEventHandler<HTMLElement>;
-  onDragEnd?: DragEventHandler<HTMLElement>;
-}) => {
+export const CharKey = ({ isActive, highlight, children, unitWidth = 1, ...other }: CharKeyProps) => {
   return (
-    <StyledKey
-      onDragEnter={onDragEnter}
-      onDragLeave={onDragLeave}
-      onDrop={onDrop}
-      highlight={showDroppable}
-      draggable
-      onDragStart={charKeyDragStart(value ?? children)}
-      onDragEnd={(e) => {
-        charKeyDragEnd(e);
-        if (onDragEnd) {
-          onDragEnd(e);
-        }
-      }}
-    >
-      {children}
+    <StyledKey isActive={isActive} highlight={highlight} draggable unitWidth={unitWidth} {...other}>
+      <div>{children}</div>
     </StyledKey>
   );
 };
 
-const StyledBigKey = styled(StyledKey)(() => ({
-  width: 'auto',
-  paddingRight: `1rem`,
-  paddingLeft: `1rem`,
-  '@media(min-width: 600px)': {
-    paddingRight: `2rem`,
-    paddingLeft: `2rem`,
-    width: `auto`
-  }
-}));
-
-export const BigKey = StyledBigKey;
-
-export const BigCharKey = ({ children, value }: { children: string; value: string }) => {
-  return (
-    <StyledBigKey draggable onDragStart={charKeyDragStart(value ?? children)} onDragEnd={charKeyDragEnd}>
-      {children}
-    </StyledBigKey>
-  );
-};
-
-export const Keys = styled.div(() => ({
+export const KeyRow = styled.div(() => ({
   display: 'flex',
   flex: '1 1',
   flexWrap: 'wrap',
   width: '100%',
-  textAlign: 'center',
+  alignContent: 'flex-start',
+  justifyContent: 'center'
+}));
+
+export const KeyRowsContainer = styled.div(() => ({
+  flexDirection: 'column',
+  display: 'flex',
   alignContent: 'flex-start',
   justifyContent: 'center'
 }));

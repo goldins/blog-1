@@ -12,6 +12,8 @@ export default (theme: Theme) => `
   }
 
   body {
+    padding: 0,
+    margin: 0,
     width: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
@@ -57,7 +59,6 @@ export default (theme: Theme) => `
   td,
   th {
     padding: 0.25rem 0.5rem;
-    border: 1px solid ${theme.colors.ui.light};
   }
 
   th {
