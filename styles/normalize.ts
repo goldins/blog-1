@@ -6,8 +6,9 @@ export default (theme: Theme) => `
   }
 
   html {
-    font-size: ${theme.dimensions.fontSize.regular}px !important;
-    line-height: ${theme.dimensions.lineHeight.regular} !important;
+    font-size: ${theme.dimensions.fontSize.regular}px;
+    line-height: ${theme.dimensions.lineHeight.regular};
+    background-color: ${theme.colors.gray.dark};
     touch-action: manipulation;
   }
 
@@ -18,14 +19,13 @@ export default (theme: Theme) => `
     overflow-x: hidden;
     overflow-y: scroll;
     font-family: ${theme.fonts.sansSerif};
-    color: ${theme.colors.black};
-    background-color: ${theme.colors.white};
+    color: ${theme.colors.gray.copy};
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
   }
 
   a {
-    color: ${theme.colors.brand};
+    color: ${theme.colors.accent};
     text-decoration: none;
 
     &:hover,

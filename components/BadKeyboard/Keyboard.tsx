@@ -6,11 +6,11 @@ import useKeyboardReducer, {
   CHAR,
   setAlt,
   setShift,
-  State,
+  UseKeyboard,
   StateProps,
   updateCharAlt,
   updateCharShift
-} from './state';
+} from './useKeyboard';
 
 // prettier-ignore
 const ROW_1 = {
@@ -81,7 +81,7 @@ interface RowKeysProps extends StateProps {
   post?: string[];
 }
 
-const toggleCharState = (e: DragEvent<HTMLElement>, v: KeyWithMeta, state: State, dispatch: Dispatch<Action>) => {
+const toggleCharState = (e: DragEvent<HTMLElement>, v: KeyWithMeta, state: UseKeyboard, dispatch: Dispatch<Action>) => {
   const {
     displayValue,
     acceptsShift,
@@ -110,18 +110,24 @@ const onDragEnd = (e: DragEvent<HTMLElement>, v: KeyWithMeta, dispatch: Dispatch
 };
 
 const onDragStart = (e: DragEvent<HTMLElement>, dispatch: Dispatch<Action>) => {
-  e.dataTransfer.setData('text', e.currentTarget.innerText);
+  const {
+    currentTarget: { innerText },
+    dataTransfer
+  } = e;
+  if (![ALT, SHIFT].includes(innerText)) {
+    dataTransfer.setData('text', innerText);
+  }
 
-  if (e.currentTarget.innerText === ALT) {
+  if (innerText === ALT) {
     dispatch(setAlt(true));
   }
 
-  if (e.currentTarget.innerText === SHIFT) {
+  if (innerText === SHIFT) {
     dispatch(setShift(true));
   }
 };
 
-const getDisplayValue = ({ modified }: KeyWithMeta, state: State): string => {
+const getDisplayValue = ({ modified }: KeyWithMeta, state: UseKeyboard): string => {
   const { alt = false, shift = false } = modified.normal in state.keys ? state.keys[modified.normal] : {};
   switch (true) {
     case alt && shift:
@@ -160,10 +166,11 @@ const RowKeys = memo(({ row, state, dispatch }: RowKeysProps) => {
           return [...acc, newItem];
         }, [])
         .map((v, i) => {
+          const hasHighlight = (v.acceptsAlt && state.modifiers.alt) || (v.acceptsShift && state.modifiers.shift);
           return (
             <CharKey
               key={i}
-              highlight={(v.acceptsAlt && state.modifiers.alt) || (v.acceptsShift && state.modifiers.shift)}
+              highlight={hasHighlight}
               unitWidth={v.width}
               onClick={(e) => resetKey(e, v, dispatch)}
               onDragEnter={(e) => toggleCharState(e, v, state, dispatch)}
@@ -180,17 +187,19 @@ const RowKeys = memo(({ row, state, dispatch }: RowKeysProps) => {
   );
 });
 
-const makeMeta = (v: CHAR) => ({
-  displayValue: v,
-  modified: {
-    normal: v,
-    shift: v,
-    alt: v,
-    shiftAlt: v
-  },
-  acceptsShift: ![SHIFT, ALT, BACKSPACE, ' '].includes(v),
-  acceptsAlt: ![SHIFT, ALT, BACKSPACE, ' '].includes(v)
-});
+const makeMeta = (normal: CHAR, alt?: string, shift?: string, shiftAlt?: string) => {
+  return {
+    displayValue: normal,
+    modified: {
+      normal: normal,
+      shift: shift ?? normal,
+      alt: alt ?? normal,
+      shiftAlt: shiftAlt ?? normal
+    },
+    acceptsShift: ![SHIFT, ALT, BACKSPACE, ' '].includes(normal),
+    acceptsAlt: ![SHIFT, ALT, BACKSPACE, ' ', '`'].includes(normal)
+  };
+};
 
 const expandRow = (pre: CHAR[] = [], row: Modifiers, post: CHAR[] = []): RowKeysProps['row'] => {
   const normal = row.normal.split('') as CHAR[];
@@ -199,21 +208,11 @@ const expandRow = (pre: CHAR[] = [], row: Modifiers, post: CHAR[] = []): RowKeys
   const shiftAlt = row.shiftAlt.split('');
 
   const keys: RowKeysProps['row'] = normal.map((n, i) => {
-    return {
-      displayValue: normal[i],
-      modified: {
-        normal: normal[i],
-        shift: shift[i],
-        alt: alt[i],
-        shiftAlt: shiftAlt[i]
-      },
-      acceptsShift: ![SHIFT, ALT, BACKSPACE, ' '].includes(n),
-      acceptsAlt: ![SHIFT, ALT, BACKSPACE, ' '].includes(n)
-    };
+    return makeMeta(n, alt[i], shift[i], shiftAlt[i]);
   });
 
-  keys.unshift(...pre.map(makeMeta));
-  keys.push(...post.map(makeMeta));
+  keys.unshift(...pre.map((v) => makeMeta(v)));
+  keys.push(...post.map((v) => makeMeta(v)));
 
   return keys;
 };

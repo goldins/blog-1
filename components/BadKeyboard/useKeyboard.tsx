@@ -30,7 +30,7 @@ const KEYS: CharsRecord = CHARS.reduce<CharsRecord>(
   {} as CharsRecord
 );
 
-export interface State {
+export interface UseKeyboard {
   // 'a': { shift: false, alt: false }
   modifiers: Record<MODIFIERS, boolean>;
   keys: Record<CHAR, Record<MODIFIERS, boolean>>;
@@ -43,11 +43,11 @@ export type Action =
   | { type: 'updateCharAlt'; char: CHAR; value: boolean };
 
 export interface StateProps {
-  state: State;
+  state: UseKeyboard;
   dispatch: Dispatch<Action>;
 }
 
-export const reducer: Reducer<State, Action> = (state, action) => {
+export const reducer: Reducer<UseKeyboard, Action> = (state, action) => {
   switch (action.type) {
     case 'setShift':
       return {
@@ -92,7 +92,7 @@ export const reducer: Reducer<State, Action> = (state, action) => {
   return { ...state };
 };
 
-export const initialState = (): State => ({
+export const initialState = (): UseKeyboard => ({
   modifiers: {
     alt: false,
     shift: false
