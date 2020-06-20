@@ -7,6 +7,11 @@ import { Global } from '@emotion/core';
 import normalize from '../styles/normalize';
 import { SiteHead } from '../components/SiteHead';
 
+import { polyfill } from 'mobile-drag-drop';
+import { scrollBehaviourDragImageTranslateOverride } from 'mobile-drag-drop/scroll-behaviour';
+
+import 'mobile-drag-drop/default.css';
+
 interface AppProps {
   Component: () => React.ReactElement;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,6 +19,9 @@ interface AppProps {
 }
 
 export default ({ Component, pageProps }: AppProps) => {
+  React.useEffect(() => {
+    polyfill({ dragImageTranslateOverride: scrollBehaviourDragImageTranslateOverride });
+  }, []);
   return (
     <Container>
       <SiteHead />
