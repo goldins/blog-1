@@ -11,6 +11,8 @@ import useKeyboardReducer, {
   updateCharAlt,
   updateCharShift
 } from './useKeyboard';
+import { Theme } from '../../styles/defaultTheme';
+import { useTheme } from 'emotion-theming';
 
 // prettier-ignore
 const ROW_1 = {
@@ -55,6 +57,8 @@ const ROW_5 = {
 export const ALT = 'ALT';
 export const SHIFT = 'SHIFT';
 export const BACKSPACE = 'BACKSPACE';
+export const SHIFT_SMALL = '⇧';
+export const BACKSPACE_SMALL = '←';
 
 interface Modifiers {
   normal: string;
@@ -79,9 +83,12 @@ interface RowKeysProps extends StateProps {
   row: KeyWithMeta[];
   pre?: string[];
   post?: string[];
+  small: boolean;
 }
 
 const toggleCharState = (e: DragEvent<HTMLElement>, v: KeyWithMeta, state: UseKeyboard, dispatch: Dispatch<Action>) => {
+  e.preventDefault();
+  e.stopPropagation();
   const {
     displayValue,
     acceptsShift,
@@ -104,30 +111,33 @@ const resetKey = (e: DragEvent<HTMLElement> | MouseEvent<HTMLElement>, v: KeyWit
 };
 
 const onDragEnd = (e: DragEvent<HTMLElement>, v: KeyWithMeta, dispatch: Dispatch<Action>) => {
+  e.preventDefault();
+  e.stopPropagation();
   resetKey(e, v, dispatch);
   dispatch(setAlt(false));
   dispatch(setShift(false));
 };
 
 const onDragStart = (e: DragEvent<HTMLElement>, dispatch: Dispatch<Action>) => {
-  const {
-    currentTarget: { innerText },
-    dataTransfer
-  } = e;
-  if (![ALT, SHIFT].includes(innerText)) {
-    dataTransfer.setData('text', innerText);
+  const { currentTarget, dataTransfer } = e;
+  const dataValue = currentTarget.getAttribute('data-value');
+  if (dataValue === null) {
+    throw new Error('Invalid text content');
+  }
+  if (![ALT, SHIFT, SHIFT_SMALL].includes(dataValue)) {
+    dataTransfer.setData('text', dataValue);
   }
 
-  if (innerText === ALT) {
+  if (dataValue === ALT) {
     dispatch(setAlt(true));
   }
 
-  if (innerText === SHIFT) {
+  if ([SHIFT, SHIFT_SMALL].includes(dataValue)) {
     dispatch(setShift(true));
   }
 };
 
-const getDisplayValue = ({ modified }: KeyWithMeta, state: UseKeyboard): string => {
+const getDataValue = ({ modified }: KeyWithMeta, state: UseKeyboard): string => {
   const { alt = false, shift = false } = modified.normal in state.keys ? state.keys[modified.normal] : {};
   switch (true) {
     case alt && shift:
@@ -141,11 +151,27 @@ const getDisplayValue = ({ modified }: KeyWithMeta, state: UseKeyboard): string 
   }
 };
 
-const RowKeys = memo(({ row, state, dispatch }: RowKeysProps) => {
+const getDisplayValue = (displayValue: string, small: boolean) => {
+  if (!small) {
+    return displayValue;
+  }
+
+  if (displayValue === SHIFT) {
+    return SHIFT_SMALL;
+  }
+
+  if (displayValue === BACKSPACE) {
+    return BACKSPACE_SMALL;
+  }
+
+  return displayValue;
+};
+
+const RowKeys = memo(({ row, state, dispatch, small }: RowKeysProps) => {
   return (
     <KeyRow>
       {row
-        .reduce((acc: (KeyWithMeta & { width: number; displayValue: string })[], key) => {
+        .reduce((acc: (KeyWithMeta & { width: number; displayValue: string; dataValue: string })[], key) => {
           if (acc.length >= 1 && acc[acc.length - 1].modified.normal === key.modified.normal) {
             const newVal = acc.pop();
             if (!newVal) {
@@ -155,10 +181,12 @@ const RowKeys = memo(({ row, state, dispatch }: RowKeysProps) => {
             return [...acc, newVal];
           }
 
-          const displayValue = getDisplayValue(key, state);
+          const dataValue = getDataValue(key, state);
+          const displayValue = getDisplayValue(dataValue, small);
 
           const newItem = {
             ...key,
+            dataValue,
             displayValue,
             width: 1
           };
@@ -169,6 +197,7 @@ const RowKeys = memo(({ row, state, dispatch }: RowKeysProps) => {
           const hasHighlight = (v.acceptsAlt && state.modifiers.alt) || (v.acceptsShift && state.modifiers.shift);
           return (
             <CharKey
+              data-value={v.dataValue}
               key={i}
               highlight={hasHighlight}
               unitWidth={v.width}
@@ -217,22 +246,39 @@ const expandRow = (pre: CHAR[] = [], row: Modifiers, post: CHAR[] = []): RowKeys
   return keys;
 };
 
-const row1 = expandRow([], ROW_1, new Array(3).fill(BACKSPACE));
-const row2 = expandRow([], ROW_2, []);
-const row3 = expandRow([], ROW_3, []);
-const row4 = expandRow(new Array(2).fill(SHIFT), ROW_4, new Array(2).fill(SHIFT));
-const row5 = expandRow([ALT], ROW_5, [ALT]);
-
 export const Keyboard = () => {
+  const theme = useTheme<Theme>();
   const [state, dispatch] = useKeyboardReducer();
+  const [small, setSmall] = React.useState(false);
+  const [rows, setRows] = React.useState<KeyWithMeta[][]>([]);
+
+  React.useEffect(() => {
+    if (document.body.clientWidth < theme.breakpoints.sm) {
+      setSmall(true);
+
+      const row1 = expandRow([], ROW_1, []);
+      const row2 = expandRow([], ROW_2, []);
+      const row3 = expandRow([], ROW_3, []);
+      const row4 = expandRow([], ROW_4, []);
+      const row5 = expandRow([SHIFT, ALT], ROW_5, [BACKSPACE]);
+      setRows([row1, row2, row3, row4, row5]);
+    } else {
+      const row1 = expandRow([], ROW_1, new Array(3).fill(BACKSPACE));
+      const row2 = expandRow([], ROW_2, []);
+      const row3 = expandRow([], ROW_3, []);
+      const row4 = expandRow(new Array(2).fill(SHIFT), ROW_4, new Array(2).fill(SHIFT));
+      const row5 = expandRow([ALT], ROW_5, [ALT]);
+      setRows([row1, row2, row3, row4, row5]);
+    }
+  }, []);
 
   return (
     <KeyRowsContainer>
-      <RowKeys state={state} dispatch={dispatch} row={row1} />
-      <RowKeys state={state} dispatch={dispatch} row={row2} />
-      <RowKeys state={state} dispatch={dispatch} row={row3} />
-      <RowKeys state={state} dispatch={dispatch} row={row4} />
-      <RowKeys state={state} dispatch={dispatch} row={row5} />
+      <>
+        {rows.map((row, i) => (
+          <RowKeys key={i} state={state} dispatch={dispatch} row={row} small={small} />
+        ))}
+      </>
     </KeyRowsContainer>
   );
 };

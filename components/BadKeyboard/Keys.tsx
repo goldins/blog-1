@@ -44,10 +44,13 @@ const StyledKey = styled.div(({ highlight = false, unitWidth = 1, theme }: Style
       padding: `0 ${Math.round(KEY_HEIGHT / 4)}rem`
     },
     [`@media(max-width: ${theme.breakpoints.sm}px)`]: {
-      height: `${KEY_HEIGHT}rem`,
-      minWidth: `${KEY_HEIGHT * unitWidth}rem`,
-      fontSize: `${KEY_HEIGHT / 3}rem`,
-      margin: 1
+      height: `5vh`,
+      minWidth: `${7 * unitWidth}vw`,
+      fontSize: `${KEY_HEIGHT * 0.33}rem`,
+      margin: 1,
+      '& div': {
+        padding: `0 ${Math.round((KEY_HEIGHT / 4) * 0.6)}rem`
+      }
     }
   };
 });
@@ -74,9 +77,14 @@ export const KeyRow = styled.div(() => ({
   justifyContent: 'center'
 }));
 
-export const KeyRowsContainer = styled.div(() => ({
+export const KeyRowsContainer = styled.div(({ theme }: { theme: Theme }) => ({
   flexDirection: 'column',
   display: 'flex',
   alignContent: 'flex-start',
-  justifyContent: 'center'
+  justifyContent: 'center',
+  [`@media(max-width: ${theme.breakpoints.sm}px)`]: {
+    position: 'fixed',
+    left: 0,
+    bottom: 0
+  }
 }));

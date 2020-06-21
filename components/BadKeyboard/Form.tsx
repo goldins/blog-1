@@ -2,7 +2,7 @@ import React from 'react';
 import { noop } from 'lodash';
 import styled from '@emotion/styled';
 import { Theme } from '../../styles/defaultTheme';
-import { BACKSPACE } from './Keyboard';
+import { BACKSPACE, BACKSPACE_SMALL } from './Keyboard';
 import { useTheme } from 'emotion-theming';
 
 const StyledForm = styled.form(({ theme }: { theme: Theme }) => ({
@@ -15,6 +15,14 @@ const StyledForm = styled.form(({ theme }: { theme: Theme }) => ({
   marginBottom: `1rem`,
   '& input': {
     marginBottom: '.5rem'
+  },
+  [`@media(max-width: ${theme.breakpoints.sm}px)`]: {
+    marginBottom: 0,
+    height: '40%',
+    position: 'fixed',
+    left: 0,
+    width: '100%',
+    overflow: 'scroll'
   }
 }));
 
@@ -58,7 +66,9 @@ const updateForm: OnDrop = (text, valueKey, values, setValues) => {
     // for now, just append to the end.
     // it seems impossible to know at what selection index the drop is occurring before it happens.2
     // selectionStart and selectionEnd are not updated as the drag is happening.
-    const newVal = text === BACKSPACE ? oldValues[valueKey].slice(0, -1) : oldValues[valueKey] + text;
+    const newVal = [BACKSPACE, BACKSPACE_SMALL].includes(text)
+      ? oldValues[valueKey].slice(0, -1)
+      : oldValues[valueKey] + text;
 
     return { ...oldValues, [valueKey]: newVal };
   });
@@ -77,19 +87,30 @@ export const Form = () => {
 
   const [values, setValues] = React.useState<FormValues>({ value1: '', value2: '' });
 
+  const setHighlight = (e: React.DragEvent<HTMLElement>) => {
+    e.currentTarget.style.borderColor = theme.colors.accent;
+
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const clearHighlight = (e: React.DragEvent<HTMLElement>) => {
+    e.currentTarget.style.borderColor = '';
+
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   const onDrop = (e: React.DragEvent<HTMLInputElement>, valueKey: keyof FormValues) => {
     const { dataTransfer } = e;
     const text = dataTransfer.getData('text');
 
     updateForm(text, valueKey, values, setValues);
-  };
 
-  const setHighlight = ({ currentTarget }: React.DragEvent<HTMLElement>) => {
-    currentTarget.style.borderColor = theme.colors.accent;
-  };
+    clearHighlight(e);
 
-  const clearHighlight = ({ currentTarget }: React.DragEvent<HTMLElement>) => {
-    currentTarget.style.borderColor = '';
+    e.preventDefault();
+    e.stopPropagation();
   };
 
   return (
@@ -104,6 +125,7 @@ export const Form = () => {
       <StyledInput
         placeholder="Drag here"
         type="text"
+        onDragOver={(e) => e.preventDefault()}
         onDragEnter={setHighlight}
         onDragLeave={clearHighlight}
         onDrop={(e) => onDrop(e, 'value1')}
@@ -113,6 +135,7 @@ export const Form = () => {
       <StyledInput
         placeholder="Or drag here"
         type="text"
+        onDragOver={(e) => e.preventDefault()}
         onDragEnter={setHighlight}
         onDragLeave={clearHighlight}
         onDrop={(e) => onDrop(e, 'value2')}
