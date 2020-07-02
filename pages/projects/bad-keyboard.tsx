@@ -1,6 +1,6 @@
 import React from 'react';
 import { BadKeyboard } from '../../components/BadKeyboard/BadKeyboard';
-import { H2 } from '../../components/General/Heading';
+import { H2 } from '../../components/General';
 
 export default () => (
   <>

@@ -10,16 +10,18 @@ interface StyledKeyProps {
   theme: Theme;
 }
 
+const KEY_COLOR = '#2230C1';
+
 // 44/16 = 2.75
 const KEY_HEIGHT = 2.75;
 const ANIM_DURATION = `200ms`;
 
 const StyledKey = styled.div(({ highlight = false, unitWidth = 1, theme }: StyledKeyProps) => {
-  const color = highlight ? darken(0.2, theme.colors.brand) : theme.colors.brand;
-  const borderColor = highlight ? darken(0.2, theme.colors.brand) : theme.colors.brand;
+  const color = highlight ? darken(0.2, KEY_COLOR) : KEY_COLOR;
+  const borderColor = highlight ? darken(0.2, KEY_COLOR) : KEY_COLOR;
   const background = `radial-gradient(circle, ${
-    highlight ? lighten(0.7, theme.colors.brand) : lighten(0.5, theme.colors.brand)
-  } 0%, ${lighten(0.4, theme.colors.brand)} 100%)`;
+    highlight ? lighten(0.7, KEY_COLOR) : lighten(0.5, KEY_COLOR)
+  } 0%, ${lighten(0.4, KEY_COLOR)} 100%)`;
   return {
     margin: 3,
     color,

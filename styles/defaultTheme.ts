@@ -1,7 +1,7 @@
 import facepaint from 'facepaint';
 
 const colors = {
-  brand: '#2230c1',
+  brand: '#46e2a9',
   accent: '#ffb238',
   success: '#37b635',
   error: '#ec1818',

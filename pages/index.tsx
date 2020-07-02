@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import Link from 'next/link';
+import { H1, A, P } from '../components/General';
 
 const Container = styled.div(() => ({
   minHeight: '100vh',
@@ -8,20 +9,7 @@ const Container = styled.div(() => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
-  alignItems: 'center',
-  '& a': {
-    color: '#0070F3',
-    textDecoration: 'none',
-    '&:hover, &:focus, &:active': {
-      textDecoration: 'underline'
-    }
-  }
-}));
-
-const H1 = styled.h1(() => ({
-  margin: 0,
-  lineHeight: 1.15,
-  fontSize: '4rem'
+  alignItems: 'center'
 }));
 
 const Footer = styled.footer(() => ({
@@ -41,13 +29,15 @@ export default () => {
       </main>
 
       <Link href="/blog">
-        <a>Blog</a>
+        <A>Blog</A>
       </Link>
       <Link href="/projects">
-        <a>Projects</a>
+        <A>Projects</A>
       </Link>
 
-      <Footer>Footer</Footer>
+      <Footer>
+        <P>Footer</P>
+      </Footer>
     </Container>
   );
 };
