@@ -270,7 +270,7 @@ export const Keyboard = () => {
       const row5 = expandRow([ALT], ROW_5, [ALT]);
       setRows([row1, row2, row3, row4, row5]);
     }
-  }, []);
+  }, [theme.breakpoints.sm]);
 
   return (
     <KeyRowsContainer>
