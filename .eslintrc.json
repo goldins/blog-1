@@ -52,5 +52,8 @@
         "@typescript-eslint/explicit-member-accessibility": ["error"]
       }
     }
-  ]
+  ],
+  "globals": {
+    "jest": false
+  }
 }
