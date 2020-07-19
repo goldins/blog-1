@@ -17,12 +17,11 @@ export const Container = (props: React.PropsWithChildren<Record<string, unknown>
   );
 };
 
-const VerticalSection = styled(Section)`
-  min-height: 100vh;
-`;
-
-export const VerticalContainer = (props: React.PropsWithChildren<Record<string, unknown>>) => (
-  <VerticalSection>
-    <main>{props.children}</main>
-  </VerticalSection>
-);
+export const VerticalContainer = styled.div({
+  minHeight: '100vh',
+  padding: '0 0.5rem',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center'
+});

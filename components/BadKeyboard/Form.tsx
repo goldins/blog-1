@@ -4,49 +4,11 @@ import styled from '@emotion/styled';
 import { Theme } from '../../styles/defaultTheme';
 import { BACKSPACE, BACKSPACE_SMALL } from './Keyboard';
 import { useTheme } from 'emotion-theming';
+import { Button, FormContainer, TextInput } from '../General';
 
-const StyledForm = styled.form(({ theme }: { theme: Theme }) => ({
-  borderWidth: 1,
-  borderStyle: 'solid',
-  borderColor: theme.colors.gray.calm,
-  display: 'flex',
-  flexDirection: 'column',
-  padding: `1rem`,
-  marginBottom: `1rem`,
-  '& input': {
-    marginBottom: '.5rem'
-  },
-  [`@media(max-width: ${theme.breakpoints.sm}px)`]: {
-    marginBottom: 0,
-    height: '40%',
-    position: 'fixed',
-    left: 0,
-    width: '100%',
-    overflow: 'scroll'
-  }
-}));
-
-const StyledInput = styled.input(({ theme }: { theme: Theme }) => ({
+const StyledInput = styled(TextInput)(({ theme }: { theme: Theme }) => ({
   color: 'transparent',
-  textShadow: `0 0 0 ${theme.colors.gray.dark}`,
-  fontSize: theme.dimensions.fontSize.regular,
-  lineHeight: theme.dimensions.lineHeight.regular * 1.5,
-  letterSpacing: 1,
-  borderColor: theme.colors.gray.calm,
-  borderRadius: 8,
-  borderStyle: 'solid',
-  borderWidth: 2,
-  cursor: 'not-allowed',
-  '&:focus': {
-    outline: 'none'
-  }
-}));
-
-const StyledButton = styled.button(({ theme }: { theme: Theme }) => ({
-  fontSize: theme.dimensions.fontSize.regular,
-  lineHeight: theme.dimensions.lineHeight.regular * 1.5,
-  letterSpacing: 2,
-  cursor: 'pointer'
+  textShadow: `0 0 0 ${theme.colors.gray.dark}`
 }));
 
 type FormValues = {
@@ -88,7 +50,7 @@ export const Form = () => {
   const [values, setValues] = React.useState<FormValues>({ value1: '', value2: '' });
 
   const setHighlight = (e: React.DragEvent<HTMLElement>) => {
-    e.currentTarget.style.borderColor = theme.colors.accent;
+    e.currentTarget.style.borderColor = theme.colors.brand;
 
     e.preventDefault();
     e.stopPropagation();
@@ -114,7 +76,7 @@ export const Form = () => {
   };
 
   return (
-    <StyledForm
+    <FormContainer
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -123,8 +85,9 @@ export const Form = () => {
       noValidate
     >
       <StyledInput
+        sz="lg"
         placeholder="Drag here"
-        type="text"
+        disabled
         onDragOver={(e) => e.preventDefault()}
         onDragEnter={setHighlight}
         onDragLeave={clearHighlight}
@@ -133,8 +96,9 @@ export const Form = () => {
         onChange={noop}
       />
       <StyledInput
+        sz="lg"
         placeholder="Or drag here"
-        type="text"
+        disabled
         onDragOver={(e) => e.preventDefault()}
         onDragEnter={setHighlight}
         onDragLeave={clearHighlight}
@@ -142,7 +106,9 @@ export const Form = () => {
         value={values.value2}
         onChange={noop}
       />
-      <StyledButton type="submit">Submit</StyledButton>
-    </StyledForm>
+      <Button sz="lg" type="submit">
+        Submit
+      </Button>
+    </FormContainer>
   );
 };

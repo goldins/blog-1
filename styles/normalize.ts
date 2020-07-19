@@ -8,7 +8,7 @@ export default (theme: Theme): CSSObject => ({
   html: {
     fontSize: `${theme.dimensions.fontSize.regular}px`,
     lineHeight: theme.dimensions.lineHeight.regular,
-    backgroundColor: theme.colors.gray.dark,
+    backgroundColor: theme.colors.ui.whisper,
     touchAction: 'manipulation'
   },
   body: {
@@ -17,7 +17,7 @@ export default (theme: Theme): CSSObject => ({
     width: '100%',
     overflowX: 'hidden',
     overflowY: 'scroll',
-    color: theme.colors.ui.light,
+    color: theme.colors.gray.copy,
     fontFamily: theme.fonts.sansSerif,
     fontSize: theme.dimensions.fontSize.regular
   },
@@ -68,7 +68,7 @@ export default (theme: Theme): CSSObject => ({
     marginBottom: '0.5rem',
     color: theme.colors.black,
     fontWeight: 600,
-    lineHeight: theme.dimensions.lineHeight.heading,
+    lineHeight: theme.dimensions.lineHeight.regular,
     textRendering: 'optimizeLegibility'
   },
   h1: {

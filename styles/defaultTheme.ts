@@ -1,12 +1,16 @@
 import facepaint from 'facepaint';
 
+export interface SizeProps {
+  sz?: 'sm' | 'md' | 'lg';
+}
+
 const colors = {
-  brand: '#46e2a9',
+  brand: '#46e2b6',
   accent: '#ffb238',
   success: '#37b635',
   error: '#ec1818',
   ui: {
-    bright: '#e0d6eb',
+    bright: '#d9d9d9',
     light: '#f5f3f7',
     whisper: '#fbfafc'
   },
@@ -44,8 +48,9 @@ const widths = {
 
 const dimensions = {
   fontSize: {
+    small: 12,
     regular: 16,
-    large: 18
+    large: 20
   },
   headingSizes: {
     h1: 2.441,
@@ -54,12 +59,15 @@ const dimensions = {
     h4: 1.25
   },
   lineHeight: {
-    regular: 1.45,
-    heading: 1.2
+    small: 1.2,
+    regular: 2,
+    large: 2.5
   },
   containerPadding: 1.5,
   borderRadii: {
-    regular: 6
+    small: 4,
+    regular: 6,
+    large: 10
   }
 };
 
