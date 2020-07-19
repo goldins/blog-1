@@ -8,7 +8,8 @@ import { Button, FormContainer, TextInput } from '../General';
 
 const StyledInput = styled(TextInput)(({ theme }: { theme: Theme }) => ({
   color: 'transparent',
-  textShadow: `0 0 0 ${theme.colors.gray.dark}`
+  textShadow: `0 0 0 ${theme.colors.gray.dark}`,
+  cursor: 'not-allowed'
 }));
 
 type FormValues = {
@@ -63,6 +64,15 @@ export const Form = () => {
     e.stopPropagation();
   };
 
+  const onDragOver = (e: React.DragEvent<HTMLElement>) => {
+    setHighlight(e);
+    e.preventDefault();
+  };
+
+  const onDragLeave = (e: React.DragEvent<HTMLElement>) => {
+    clearHighlight(e);
+  };
+
   const onDrop = (e: React.DragEvent<HTMLInputElement>, valueKey: keyof FormValues) => {
     const { dataTransfer } = e;
     const text = dataTransfer.getData('text');
@@ -87,10 +97,8 @@ export const Form = () => {
       <StyledInput
         sz="lg"
         placeholder="Drag here"
-        disabled
-        onDragOver={(e) => e.preventDefault()}
-        onDragEnter={setHighlight}
-        onDragLeave={clearHighlight}
+        onDragOver={onDragOver}
+        onDragLeave={onDragLeave}
         onDrop={(e) => onDrop(e, 'value1')}
         value={values.value1}
         onChange={noop}
@@ -98,10 +106,8 @@ export const Form = () => {
       <StyledInput
         sz="lg"
         placeholder="Or drag here"
-        disabled
-        onDragOver={(e) => e.preventDefault()}
-        onDragEnter={setHighlight}
-        onDragLeave={clearHighlight}
+        onDragOver={onDragOver}
+        onDragLeave={onDragLeave}
         onDrop={(e) => onDrop(e, 'value2')}
         value={values.value2}
         onChange={noop}
