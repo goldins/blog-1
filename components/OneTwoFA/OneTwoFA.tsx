@@ -1,27 +1,11 @@
 import * as React from 'react';
-import speakeasy from 'speakeasy';
-import styled, { WithTheme } from '@emotion/styled';
 
-import { Button, H3, P, TextInput } from '../General';
-import { Theme } from '../../styles/defaultTheme';
-import { ENCODING, STEP } from './lib/consts';
+import { Button, H3, P } from '../General';
 
-export const OneOffTextInput = styled(TextInput)(
-  {
-    fontFamily: 'monospace',
-    outline: 'none',
-    lineHeight: 1.3,
-    border: 'none'
-  },
-  ({ theme }: WithTheme<unknown, Theme>) => ({
-    borderBottom: `2px solid ${theme.colors.brand}`,
-    borderRadius: 0,
-    fontSize: theme.dimensions.fontSize.large * 4,
-    width: theme.dimensions.fontSize.large * 4,
-    padding: 0,
-    textAlign: 'center'
-  })
-);
+import { STEP } from '../../pages/shared/2fa/consts';
+
+import { generateToken } from '../../pages/shared/2fa';
+import { TwoFAInput } from './TwoFAInput';
 
 enum Step {
   GENERATE,
@@ -40,19 +24,13 @@ const verify = async (secret: string, token: string) => {
   }
 };
 
+const getToken = (secret: string) => generateToken(secret);
+
 const fetchSecret = async (): Promise<string> => {
   const resp = await fetch('/api/2fa/generate');
   const { data } = await resp.json();
   return data;
 };
-
-const generateToken = (secret: string) =>
-  speakeasy.totp({
-    secret,
-    step: 0.5,
-    digits: 1,
-    encoding: ENCODING
-  });
 
 export const OneTwoFA = () => {
   const [error, setError] = React.useState('');
@@ -67,12 +45,11 @@ export const OneTwoFA = () => {
     setStep(Step.GENERATED);
     const data = await fetchSecret();
     setSecret(data);
-    setToken(generateToken(data));
+    setToken(getToken(data));
     setIntervalTimer(
       window.setInterval(() => {
-        const newToken = generateToken(data);
+        const newToken = getToken(data);
         setToken(newToken);
-        setToken(generateToken(data));
       }, STEP * 1000)
     );
   };
@@ -109,9 +86,8 @@ export const OneTwoFA = () => {
               <H3>token: {token}</H3>
               <P>Remember this token. You will need it later.</P>
               <P>Please enter your 2FA token.</P>
-              <OneOffTextInput
-                autoFocus
-                sz="lg"
+              <TwoFAInput
+                size={1}
                 onChange={(e) => {
                   setCodeInput(e.currentTarget.value);
                 }}

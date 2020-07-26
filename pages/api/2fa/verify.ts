@@ -1,29 +1,36 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import speakeasy from 'speakeasy';
-import { DIGITS, ENCODING, STEP } from '../../../components/OneTwoFA/lib/consts';
+import { verify } from './lib';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
     res.statusCode = 404;
-    res.json({ error: 'Something went wrong.' });
+    res.json({ error: 'Invalid endpoint.' });
     return;
   }
 
   if (!req.body) {
     res.statusCode = 400;
-    res.json({ error: 'Missing code.' });
+    res.json({ error: 'Missing body.' });
     return;
   }
 
-  const body = JSON.parse(req.body);
+  let secret: string;
+  let token: string;
+  try {
+    ({ secret, token } = JSON.parse(req.body));
+  } catch (e) {
+    res.statusCode = 400;
+    res.json({ error: e.message });
+    return;
+  }
 
-  const verified = speakeasy.totp.verify({
-    digits: DIGITS,
-    step: STEP,
-    secret: body.secret,
-    encoding: ENCODING,
-    token: body.token
-  });
+  if (!secret || !token) {
+    res.statusCode = 400;
+    res.json('Missing argument(s)');
+    return;
+  }
+
+  const verified = verify(secret, token);
 
   if (verified) {
     res.statusCode = 200;
