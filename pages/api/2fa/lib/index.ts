@@ -1,4 +1,5 @@
 import { generateToken } from '../../../shared/2fa';
+import { STEP, WINDOW } from '../../../shared/2fa/consts';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { randomBytes } = require('crypto');
@@ -18,5 +19,13 @@ export const generateSecret = () => {
 };
 
 export const verify = (secret: string, token: string) => {
-  return generateToken(secret) === token;
+  for (let i = 0; i < WINDOW; ++i) {
+    const now = Date.now();
+    const counter = Math.floor(now / STEP / 1000);
+    const actual = generateToken(secret, counter - i);
+    if (actual === token) {
+      return true;
+    }
+  }
+  return false;
 };

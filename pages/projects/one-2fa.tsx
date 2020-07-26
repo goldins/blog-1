@@ -5,7 +5,7 @@ import { OneTwoFA } from '../../components/OneTwoFA/OneTwoFA';
 export default () => {
   return (
     <>
-      <H2>One 2FA</H2>
+      <H2>🔒 2FA</H2>
       <OneTwoFA />
     </>
   );

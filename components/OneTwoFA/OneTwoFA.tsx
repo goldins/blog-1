@@ -24,7 +24,11 @@ const verify = async (secret: string, token: string) => {
   }
 };
 
-const getToken = (secret: string) => generateToken(secret);
+const getToken = (secret: string) => {
+  const now = Date.now();
+  const counter = Math.floor(now / STEP / 1000);
+  return generateToken(secret, counter);
+};
 
 const fetchSecret = async (): Promise<string> => {
   const resp = await fetch('/api/2fa/generate');
@@ -39,29 +43,25 @@ export const OneTwoFA = () => {
   const [token, setToken] = React.useState('');
   const [secret, setSecret] = React.useState('');
   const [step, setStep] = React.useState(Step.GENERATE);
-  const [intervalTimer, setIntervalTimer] = React.useState(0);
 
   const generateClick = async () => {
     setStep(Step.GENERATED);
     const data = await fetchSecret();
     setSecret(data);
     setToken(getToken(data));
-    setIntervalTimer(
-      window.setInterval(() => {
-        const newToken = getToken(data);
-        setToken(newToken);
-      }, STEP * 1000)
-    );
+    window.setInterval(() => {
+      const newToken = getToken(data);
+      setToken(newToken);
+    }, STEP * 1000);
   };
 
-  const verifyClick = async () => {
+  const verifyClick = async (e: React.FormEvent | React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     setError('');
     setSuccess('');
     try {
       await verify(secret, codeInput);
-      window.clearInterval(intervalTimer);
-      setToken('');
-      setIntervalTimer(0);
       setSuccess('Success!');
     } catch (e) {
       setError(e.message);
@@ -79,13 +79,13 @@ export const OneTwoFA = () => {
         </>
       ) : null}
       {step === Step.GENERATED ? (
-        <>
+        <form onSubmit={verifyClick}>
           {token ? (
             <>
               {' '}
               <H3>token: {token}</H3>
-              <P>Remember this token. You will need it later.</P>
-              <P>Please enter your 2FA token.</P>
+              <P>Pretend this token is in your 2FA Application.</P>
+              <P>Please enter your token.</P>
               <TwoFAInput
                 size={1}
                 onChange={(e) => {
@@ -99,7 +99,7 @@ export const OneTwoFA = () => {
               </Button>
             </>
           ) : null}
-        </>
+        </form>
       ) : null}
       {error || success ? <P style={{ color: error ? 'red' : 'green' }}>{error || success}</P> : null}
     </>
