@@ -1,5 +1,5 @@
-import { generateToken } from '../../../shared/2fa';
-import { STEP, WINDOW } from '../../../shared/2fa/consts';
+import { generateToken } from '../../../lib/2fa';
+import { STEP, WINDOW } from '../../../lib/2fa/consts';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { randomBytes } = require('crypto');

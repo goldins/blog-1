@@ -2,9 +2,9 @@ import * as React from 'react';
 
 import { Button, H3, P } from '../General';
 
-import { STEP } from '../../pages/shared/2fa/consts';
+import { STEP } from '../../lib/2fa/consts';
 
-import { generateToken } from '../../pages/shared/2fa';
+import { generateToken } from '../../lib/2fa';
 import { TwoFAInput } from './TwoFAInput';
 
 enum Step {

@@ -1,5 +1,5 @@
-export const STEP = 30;
-export const WINDOW = 1;
+export const STEP = 5;
+export const WINDOW = 2;
 
 // https://www.unicode.org/Public/UCD/latest/ucd/emoji/emoji-data.txt
 const EMOJI_CODE_POINTS_STRING =
