@@ -9,6 +9,7 @@
     "prettier",
     "prettier/@typescript-eslint"
   ],
+  "ignorePatterns": ["out_functions", "out_publish"],
   "settings": {
     "react": {
       "version": "detect"
@@ -24,21 +25,6 @@
     "react/react-in-jsx-scope": "off",
     "react/display-name": "off",
     "react/prop-types": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/explicit-member-accessibility": "off",
-    "@typescript-eslint/indent": "off",
-    "@typescript-eslint/member-delimiter-style": "off",
-    "@typescript-eslint/no-explicit-any": "warn",
-    "@typescript-eslint/no-var-requires": "warn",
-    "@typescript-eslint/no-use-before-define": "error",
-    "@typescript-eslint/no-empty-interface": "off",
-    "@typescript-eslint/no-unused-vars": [
-      "error",
-      {
-        "argsIgnorePattern": "^_"
-      }
-    ],
     "no-console": [
       "error",
       {
@@ -50,7 +36,21 @@
     {
       "files": ["*.ts", "*.tsx"],
       "rules": {
-        "@typescript-eslint/explicit-member-accessibility": ["error"]
+        "@typescript-eslint/explicit-member-accessibility": ["error"],
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/indent": "off",
+        "@typescript-eslint/member-delimiter-style": "off",
+        "@typescript-eslint/no-explicit-any": "warn",
+        "@typescript-eslint/no-var-requires": "warn",
+        "@typescript-eslint/no-use-before-define": "error",
+        "@typescript-eslint/no-empty-interface": "off",
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            "argsIgnorePattern": "^_"
+          }
+        ]
       }
     }
   ],

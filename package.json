@@ -10,7 +10,7 @@
     "postbuild": "next-on-netlify",
     "type-check": "tsc --pretty --noEmit",
     "format": "prettier --write **/*.{js,ts,tsx}",
-    "lint": "eslint . --ext ts --ext tsx --ext js",
+    "lint": "eslint .",
     "test": "jest",
     "test-all": "yarn lint && yarn type-check && yarn test"
   },
