@@ -12,24 +12,28 @@ exports[`Home page matches snapshot 1`] = `
         Simon.Goldin
       </h1>
     </main>
-    <a
-      class="css-1wmzfz"
+    <p
+      class="css-0"
     >
-      Blog
-    </a>
-    <a
-      class="css-1wmzfz"
-    >
-      Projects
-    </a>
-    <footer
-      class="css-8u3q9h"
-    >
-      <p
-        class="css-0"
+      <a
+        class="css-1i55uvb"
       >
-        Footer
-      </p>
+        Blog
+      </a>
+    </p>
+    <p
+      class="css-0"
+    >
+      <a
+        class="css-1i55uvb"
+      >
+        Projects
+      </a>
+    </p>
+    <footer
+      class="css-ctj0pp"
+    >
+      Copyright ©2020 | Simon Goldin
     </footer>
   </div>
 </DocumentFragment>
