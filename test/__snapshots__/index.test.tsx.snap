@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home page matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="css-12mft5n"
+  >
+    <main>
+      <h1
+        class="css-pavrw7"
+      >
+        Simon.Goldin
+      </h1>
+    </main>
+    <p
+      class="css-1pjcvux"
+    >
+      <a
+        class="css-1i55uvb"
+      >
+        Blog
+      </a>
+    </p>
+    <p
+      class="css-1pjcvux"
+    >
+      <a
+        class="css-1i55uvb"
+      >
+        Projects
+      </a>
+    </p>
+    <footer
+      class="css-ctj0pp"
+    >
+      Copyright ©2020 | Simon Goldin
+    </footer>
+  </div>
+</DocumentFragment>
+`;
