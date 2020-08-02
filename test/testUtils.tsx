@@ -7,7 +7,8 @@ const Providers = ({ children }: React.PropsWithChildren<unknown>): React.ReactE
   return <ThemeProvider theme={defaultTheme}>{children}</ThemeProvider>;
 };
 
-const customRender = (ui: React.ReactElement, options = {}) => render(ui, { wrapper: Providers, ...options });
+const customRender = (ui: React.ReactElement, options = {}) =>
+  render(ui, { wrapper: Providers, ...options });
 
 export * from '@testing-library/react';
 

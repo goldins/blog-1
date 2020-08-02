@@ -23,7 +23,9 @@ export default () => {
           <A>Projects</A>
         </Link>
       </P>
-      <Footer>{`Copyright ©${EASTER ? '1988 - ' : ''}${new Date().getFullYear()} | Simon Goldin`}</Footer>
+      <Footer>{`Copyright ©${
+        EASTER ? '1988 - ' : ''
+      }${new Date().getFullYear()} | Simon Goldin`}</Footer>
     </VerticalContainer>
   );
 };

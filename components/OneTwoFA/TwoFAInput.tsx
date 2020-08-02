@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styled, { WithTheme } from '@emotion/styled';
-import { TextInput } from '../General/Inputs';
+import { TextField } from '../General/Inputs';
 import { Theme } from '../../styles/defaultTheme';
 
-const TwoFATextInput = styled(TextInput)(
+const TwoFATextInput = styled(TextField)(
   {
     fontFamily: 'monospace',
     outline: 'none',

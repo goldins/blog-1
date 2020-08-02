@@ -4,9 +4,9 @@ import styled from '@emotion/styled';
 import { Theme } from '../../styles/defaultTheme';
 import { BACKSPACE, BACKSPACE_SMALL } from './Keyboard';
 import { useTheme } from 'emotion-theming';
-import { Button, FormContainer, TextInput } from '../General';
+import { Button, FormContainer, TextField } from '../General';
 
-const StyledInput = styled(TextInput)(({ theme }: { theme: Theme }) => ({
+const StyledInput = styled(TextField)(({ theme }: { theme: Theme }) => ({
   color: 'transparent',
   textShadow: `0 0 0 ${theme.colors.gray.dark}`,
   cursor: 'not-allowed'
@@ -42,7 +42,10 @@ export const Form = () => {
 
   const onSubmit = (values: FormValues) => {
     const message = Object.keys(values).reduce(
-      (acc, currentKey) => [...acc, `\n${currentKey}: ${values[currentKey as keyof FormValues].toString()}`],
+      (acc, currentKey) => [
+        ...acc,
+        `\n${currentKey}: ${values[currentKey as keyof FormValues].toString()}`
+      ],
       [] as string[]
     );
     alert(message.join(''));
