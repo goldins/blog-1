@@ -21,3 +21,7 @@ out
 # Local Netlify folder
 .netlify
 
+# next-on-netlify
+/out_publish/
+/out_functions/
+/404.html
