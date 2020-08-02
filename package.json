@@ -4,9 +4,10 @@
   "license": "MIT",
   "version": "1.0.0",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next",
     "build": "next build",
     "start": "next start",
+    "postbuild": "next-on-netlify",
     "type-check": "tsc --pretty --noEmit",
     "format": "prettier --write **/*.{js,ts,tsx}",
     "lint": "eslint . --ext ts --ext tsx --ext js",
@@ -16,12 +17,11 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "yarn run type-check"
+      "pre-push": "yarn test-all"
     }
   },
   "lint-staged": {
     "*.@(ts|tsx)": [
-      "yarn lint",
       "yarn format"
     ]
   },
@@ -33,8 +33,8 @@
     "faunadb": "^2.14.2",
     "lodash": "^4.17.19",
     "mobile-drag-drop": "^2.3.0-rc.2",
-    "netlify-lambda": "^2.0.1",
     "next": "latest",
+    "next-on-netlify": "^2.3.1",
     "polished": "^3.6.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
