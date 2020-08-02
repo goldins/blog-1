@@ -1,5 +1,5 @@
-export const STEP = 5;
-export const WINDOW = 2;
+export const TIME_STEP = 5;
+export const TIME_WINDOW = 2;
 
 // https://www.unicode.org/Public/UCD/latest/ucd/emoji/emoji-data.txt
 const EMOJI_CODE_POINTS_STRING =

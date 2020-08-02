@@ -1,10 +1,11 @@
-import * as React from 'react';
-import styled, { WithTheme } from '@emotion/styled';
 import { SizeProps, Theme } from '../../../styles/defaultTheme';
+import styled, { WithTheme } from '@emotion/styled';
 
-interface Props extends React.InputHTMLAttributes<HTMLInputElement>, SizeProps {}
+interface Props extends React.InputHTMLAttributes<HTMLInputElement>, SizeProps {
+  label?: React.ReactNode;
+}
 
-const StyledTextInput = styled('input')<WithTheme<Props, Theme>>(
+export const StyledTextInput = styled('input')<WithTheme<Props, Theme>>(
   {
     letterSpacing: 1,
     borderStyle: 'solid',
@@ -36,10 +37,3 @@ const StyledTextInput = styled('input')<WithTheme<Props, Theme>>(
     cursor: disabled ? 'not-allowed' : 'initial'
   })
 );
-
-export const TextInput = ({ type = 'text', ...rest }: Props) => {
-  if (!['text', 'number'].includes(type)) {
-    throw new Error(`InvalidArgument: type = ${type}`);
-  }
-  return <StyledTextInput {...rest} type={type} />;
-};

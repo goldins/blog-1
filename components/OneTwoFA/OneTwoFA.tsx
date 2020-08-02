@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { Button, H3, P } from '../General';
+import { Button, H3, P, TextField } from '../General';
 
-import { STEP } from '../../lib/2fa/consts';
+import { TIME_STEP, TIME_WINDOW } from '../../lib/2fa/consts';
 
 import { generateToken } from '../../lib/2fa';
 import { TwoFAInput } from './TwoFAInput';
@@ -12,9 +12,9 @@ enum Step {
   GENERATED
 }
 
-const verify = async (secret: string, token: string) => {
+const verify = async (secret: string, token: string, timeStep: number) => {
   const resp = await fetch('/api/2fa/verify', {
-    body: JSON.stringify({ secret, token }),
+    body: JSON.stringify({ secret, token, timeStep }),
     method: 'POST'
   });
 
@@ -24,9 +24,9 @@ const verify = async (secret: string, token: string) => {
   }
 };
 
-const getToken = (secret: string) => {
+const getToken = (secret: string, timeStep: number) => {
   const now = Date.now();
-  const counter = Math.floor(now / STEP / 1000);
+  const counter = Math.floor(now / (timeStep || TIME_STEP) / 1000);
   return generateToken(secret, counter);
 };
 
@@ -43,16 +43,17 @@ export const OneTwoFA = () => {
   const [token, setToken] = React.useState('');
   const [secret, setSecret] = React.useState('');
   const [step, setStep] = React.useState(Step.GENERATE);
+  const [timeStep, setTimeStep] = React.useState(TIME_STEP);
 
   const generateClick = async () => {
     setStep(Step.GENERATED);
     const data = await fetchSecret();
     setSecret(data);
-    setToken(getToken(data));
+    setToken(getToken(data, timeStep));
     window.setInterval(() => {
-      const newToken = getToken(data);
+      const newToken = getToken(data, timeStep);
       setToken(newToken);
-    }, STEP * 1000);
+    }, timeStep * 1000);
   };
 
   const verifyClick = async (e: React.FormEvent | React.MouseEvent) => {
@@ -61,7 +62,7 @@ export const OneTwoFA = () => {
     setError('');
     setSuccess('');
     try {
-      await verify(secret, codeInput);
+      await verify(secret, codeInput, timeStep);
       setSuccess('Success!');
     } catch (e) {
       setError(e.message);
@@ -73,6 +74,32 @@ export const OneTwoFA = () => {
       {step === Step.GENERATE ? (
         <>
           <P>Generate your 2FA token.</P>
+          <TextField
+            label="Step (s)"
+            helpText={<P sz="sm">Token is valid for this many seconds.</P>}
+            sz="md"
+            type="number"
+            min={0}
+            step={1}
+            value={timeStep}
+            onChange={(evt) => setTimeStep(+evt.currentTarget.value)}
+          />
+          <br />
+          <TextField
+            label="Window"
+            helpText={
+              <P sz="sm">
+                Number of previous tokens to accept.
+                <br />
+                Not (yet) configurable.
+              </P>
+            }
+            sz="md"
+            type="number"
+            disabled
+            value={TIME_WINDOW}
+          />
+          <br />
           <Button type="button" sz="lg" onClick={generateClick}>
             Generate
           </Button>
@@ -101,7 +128,9 @@ export const OneTwoFA = () => {
           ) : null}
         </form>
       ) : null}
-      {error || success ? <P style={{ color: error ? 'red' : 'green' }}>{error || success}</P> : null}
+      {error || success ? (
+        <P style={{ color: error ? 'red' : 'green' }}>{error || success}</P>
+      ) : null}
     </>
   );
 };
