@@ -36,7 +36,7 @@ const fetchSecret = async (): Promise<string> => {
   return data;
 };
 
-export const OneTwoFA = () => {
+export const EmojiTwoFA = () => {
   const [error, setError] = React.useState('');
   const [success, setSuccess] = React.useState('');
   const [codeInput, setCodeInput] = React.useState('');

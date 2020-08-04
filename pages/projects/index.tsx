@@ -12,8 +12,8 @@ export default () => (
       </Link>
     </P>
     <P>
-      <Link href="/projects/one-2fa">
-        <A>Single-Digit 2FA</A>
+      <Link href="/projects/e2fa">
+        <A>🔒 2FA</A>
       </Link>
     </P>
   </VerticalContainer>
