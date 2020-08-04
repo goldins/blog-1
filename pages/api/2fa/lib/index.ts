@@ -18,10 +18,15 @@ export const generateSecret = () => {
   return output;
 };
 
-export const verify = (secret: string, token: string, step: number) => {
-  for (let i = 0; i < TIME_WINDOW; ++i) {
+export const verify = (
+  secret: string,
+  token: string,
+  timeStep = TIME_STEP,
+  timeWindow = TIME_WINDOW
+) => {
+  for (let i = 0; i < timeWindow; ++i) {
     const now = Date.now();
-    const counter = Math.floor(now / (step || TIME_STEP) / 1000);
+    const counter = Math.floor(now / timeStep / 1000);
     const actual = generateToken(secret, counter - i);
     if (actual === token) {
       return true;

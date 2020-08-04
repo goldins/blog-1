@@ -17,15 +17,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   let secret: unknown;
   let token: unknown;
   let timeStep: unknown;
+  let timeWindow: unknown;
   try {
-    ({ secret, token, timeStep } = JSON.parse(req.body));
+    ({ secret, token, timeStep = 5, timeWindow = 2 } = JSON.parse(req.body));
   } catch (e) {
     res.statusCode = 400;
     res.json({ error: e.message });
     return;
   }
 
-  if (!secret || !token || typeof timeStep !== 'number') {
+  if (!secret || !token || typeof timeStep !== 'number' || typeof timeWindow !== 'number') {
     res.statusCode = 400;
     res.json('Missing/Invalid argument(s)');
     return;
@@ -37,7 +38,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
 
-  const verified = verify('' + secret, '' + token, timeStep);
+  if (timeWindow <= 1) {
+    res.statusCode = 400;
+    res.json('Step must be greater than 1');
+    return;
+  }
+
+  const verified = verify('' + secret, '' + token, timeStep, timeWindow);
 
   if (verified) {
     res.statusCode = 200;

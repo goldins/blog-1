@@ -12,9 +12,9 @@ enum Step {
   GENERATED
 }
 
-const verify = async (secret: string, token: string, timeStep: number) => {
+const verify = async (secret: string, token: string, timeStep: number, timeWindow: number) => {
   const resp = await fetch('/api/2fa/verify', {
-    body: JSON.stringify({ secret, token, timeStep }),
+    body: JSON.stringify({ secret, token, timeStep, timeWindow }),
     method: 'POST'
   });
 
@@ -26,7 +26,7 @@ const verify = async (secret: string, token: string, timeStep: number) => {
 
 const getToken = (secret: string, timeStep: number) => {
   const now = Date.now();
-  const counter = Math.floor(now / (timeStep || TIME_STEP) / 1000);
+  const counter = Math.floor(now / timeStep / 1000);
   return generateToken(secret, counter);
 };
 
@@ -44,6 +44,7 @@ export const EmojiTwoFA = () => {
   const [secret, setSecret] = React.useState('');
   const [step, setStep] = React.useState(Step.GENERATE);
   const [timeStep, setTimeStep] = React.useState(TIME_STEP);
+  const [timeWindow, setTimeWindow] = React.useState(TIME_WINDOW);
 
   const generateClick = async () => {
     setStep(Step.GENERATED);
@@ -62,7 +63,7 @@ export const EmojiTwoFA = () => {
     setError('');
     setSuccess('');
     try {
-      await verify(secret, codeInput, timeStep);
+      await verify(secret, codeInput, timeStep, timeWindow);
       setSuccess('Success!');
     } catch (e) {
       setError(e.message);
@@ -96,8 +97,8 @@ export const EmojiTwoFA = () => {
             }
             sz="md"
             type="number"
-            disabled
-            value={TIME_WINDOW}
+            onChange={(evt) => setTimeWindow(+evt.currentTarget.value)}
+            value={timeWindow}
           />
           <br />
           <Button type="button" sz="lg" onClick={generateClick}>
