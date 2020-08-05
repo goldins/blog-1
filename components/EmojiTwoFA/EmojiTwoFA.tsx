@@ -46,12 +46,12 @@ export const EmojiTwoFA = () => {
   const [timeStep, setTimeStep] = React.useState(TIME_STEP);
   const [timeWindow, setTimeWindow] = React.useState(TIME_WINDOW);
 
-  const generateClick = async (e: React.FormEvent) => {
+  const submitGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStep(Step.GENERATED);
     const data = await fetchSecret();
     setSecret(data);
     setToken(getToken(data, timeStep));
+    setStep(Step.GENERATED);
     window.setInterval(() => {
       const newToken = getToken(data, timeStep);
       setToken(newToken);
@@ -74,7 +74,7 @@ export const EmojiTwoFA = () => {
   return (
     <>
       {step === Step.GENERATE ? (
-        <form onSubmit={generateClick}>
+        <form onSubmit={submitGenerate}>
           <P>Generate your 2FA token.</P>
           <TextField
             label="Step (s)"
@@ -91,9 +91,9 @@ export const EmojiTwoFA = () => {
             label="Window"
             helpText={
               <P sz="sm">
-                Number of previous tokens to accept.
+                History of tokens to accept.
                 <br />
-                Not (yet) configurable.
+                The default value of 2 means that the latest and previous tokens will both be valid.
               </P>
             }
             sz="md"
@@ -109,25 +109,23 @@ export const EmojiTwoFA = () => {
       ) : null}
       {step === Step.GENERATED ? (
         <form onSubmit={verifyClick}>
-          {token ? (
-            <>
-              {' '}
-              <H3>token: {token}</H3>
-              <P>Pretend this token is in your 2FA Application.</P>
-              <P>Please enter your token.</P>
-              <TwoFAInput
-                size={1}
-                onChange={(e) => {
-                  setCodeInput(e.currentTarget.value);
-                }}
-              />
-              <br />
-              <br />
-              <Button type="submit" sz="lg" onClick={verifyClick}>
-                Verify
-              </Button>
-            </>
-          ) : null}
+          <>
+            {' '}
+            <H3>token: {token}</H3>
+            <P>Pretend this token is in your 2FA Application.</P>
+            <P>Please enter your token.</P>
+            <TwoFAInput
+              size={1}
+              onChange={(e) => {
+                setCodeInput(e.currentTarget.value);
+              }}
+            />
+            <br />
+            <br />
+            <Button type="submit" sz="lg" onClick={verifyClick}>
+              Verify
+            </Button>
+          </>
         </form>
       ) : null}
       {error || success ? (
