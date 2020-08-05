@@ -7,16 +7,10 @@ const { randomBytes } = require('crypto');
 const SET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz!@#$%^&*()<>?/[]{},.:;';
 const SET_SIZE = SET.length;
 
-export const generateSecret = () => {
-  const bytes = randomBytes(256);
-
-  let output = '';
-  for (let i = 0, l = bytes.length; i < l; i++) {
-    output += SET[Math.floor((bytes[i] / 255) * (SET_SIZE - 1))];
-  }
-
-  return output;
-};
+export const generateSecret = () =>
+  Array.from<number>(randomBytes(100))
+    .map((byte) => SET[Math.floor((byte / 0xff) * (SET_SIZE - 1))])
+    .join('');
 
 export const verify = (
   secret: string,
