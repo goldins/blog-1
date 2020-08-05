@@ -28,19 +28,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (!secret || !token || typeof timeStep !== 'number' || typeof timeWindow !== 'number') {
     res.statusCode = 400;
-    res.json('Missing/Invalid argument(s)');
+    res.json({ error: 'Missing/Invalid argument(s)' });
     return;
   }
 
   if (timeStep <= 0) {
     res.statusCode = 400;
-    res.json('Step must be greater than 0');
+    res.json({ error: 'Step must be greater than 0' });
     return;
   }
 
   if (timeWindow <= 1) {
     res.statusCode = 400;
-    res.json('Step must be greater than 1');
+    res.json({ error: 'Step must be greater than 1' });
     return;
   }
 
