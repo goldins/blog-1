@@ -46,7 +46,8 @@ export const EmojiTwoFA = () => {
   const [timeStep, setTimeStep] = React.useState(TIME_STEP);
   const [timeWindow, setTimeWindow] = React.useState(TIME_WINDOW);
 
-  const generateClick = async () => {
+  const generateClick = async (e: React.FormEvent) => {
+    e.preventDefault();
     setStep(Step.GENERATED);
     const data = await fetchSecret();
     setSecret(data);
@@ -73,7 +74,7 @@ export const EmojiTwoFA = () => {
   return (
     <>
       {step === Step.GENERATE ? (
-        <>
+        <form onSubmit={generateClick}>
           <P>Generate your 2FA token.</P>
           <TextField
             label="Step (s)"
@@ -101,10 +102,10 @@ export const EmojiTwoFA = () => {
             value={timeWindow}
           />
           <br />
-          <Button type="button" sz="lg" onClick={generateClick}>
+          <Button type="submit" sz="lg">
             Generate
           </Button>
-        </>
+        </form>
       ) : null}
       {step === Step.GENERATED ? (
         <form onSubmit={verifyClick}>
