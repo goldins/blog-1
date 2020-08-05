@@ -40,7 +40,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (timeWindow <= 1) {
     res.statusCode = 400;
-    res.json({ error: 'Step must be greater than 1' });
+    res.json({ error: 'Window must be greater than 1' });
     return;
   }
 
