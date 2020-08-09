@@ -13,7 +13,7 @@ export default () => (
     </P>
     <P>
       <Link href="/projects/e2fa">
-        <A>🔒 2FA</A>
+        <A>2🤬A</A>
       </Link>
     </P>
   </VerticalContainer>

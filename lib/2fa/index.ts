@@ -1,4 +1,4 @@
-import { EMOJI_CODE_POINTS, EMOJI_COUNT } from './consts';
+import { EMOJIS, EMOJI_COUNT } from './consts';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { createHmac } = require('crypto');
@@ -34,5 +34,5 @@ export const generateToken = (secret: string, counter: number) => {
   const scale = 0x7fffffff / EMOJI_COUNT;
 
   const emojiIndex = Math.floor(code / scale);
-  return String.fromCodePoint(EMOJI_CODE_POINTS[emojiIndex]);
+  return EMOJIS[emojiIndex];
 };
