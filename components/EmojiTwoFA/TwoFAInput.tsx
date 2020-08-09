@@ -20,12 +20,8 @@ const TwoFATextInput = styled(TextField)(
   })
 );
 
-export const TwoFAInput = ({
-  size,
-  onChange
-}: {
+export const TwoFAInput = (props: {
   size: number;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
-}) => {
-  return <TwoFATextInput autoFocus sz="lg" onChange={onChange} size={size} />;
-};
+  maxLength?: number;
+}) => <TwoFATextInput autoFocus sz="lg" {...props} />;

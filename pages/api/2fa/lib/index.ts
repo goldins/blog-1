@@ -7,21 +7,20 @@ const { randomBytes } = require('crypto');
 const SET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz!@#$%^&*()<>?/[]{},.:;';
 const SET_SIZE = SET.length;
 
-export const generateSecret = () => {
-  const bytes = randomBytes(100);
+export const generateSecret = () =>
+  Array.from<number>(randomBytes(100))
+    .map((byte) => SET[Math.floor((byte / 0xff) * (SET_SIZE - 1))])
+    .join('');
 
-  let output = '';
-  for (let i = 0, l = bytes.length; i < l; i++) {
-    output += SET[Math.floor((bytes[i] / 255.0) * (SET_SIZE - 1))];
-  }
-
-  return output;
-};
-
-export const verify = (secret: string, token: string, step: number) => {
-  for (let i = 0; i < TIME_WINDOW; ++i) {
+export const verify = (
+  secret: string,
+  token: string,
+  timeStep = TIME_STEP,
+  timeWindow = TIME_WINDOW
+) => {
+  for (let i = 0; i < timeWindow; ++i) {
     const now = Date.now();
-    const counter = Math.floor(now / (step || TIME_STEP) / 1000);
+    const counter = Math.floor(now / timeStep / 1000);
     const actual = generateToken(secret, counter - i);
     if (actual === token) {
       return true;

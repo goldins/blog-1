@@ -5,7 +5,7 @@ import { EmojiTwoFA } from '../../components/EmojiTwoFA/EmojiTwoFA';
 export default () => {
   return (
     <>
-      <H2>🔒 2FA</H2>
+      <H2>2🤬A</H2>
       <EmojiTwoFA />
     </>
   );
