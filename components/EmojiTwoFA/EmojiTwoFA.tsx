@@ -81,8 +81,8 @@ export const EmojiTwoFA = () => {
             helpText={<P sz="sm">Token is valid for this many seconds.</P>}
             sz="md"
             type="number"
+            step={0.1}
             min={0}
-            step={1}
             value={timeStep}
             onChange={(evt) => setTimeStep(+evt.currentTarget.value)}
           />
