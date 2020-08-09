@@ -30,9 +30,7 @@ export const generateToken = (secret: string, counter: number) => {
     ((digest[offset + 2] & 0xff) << 8) |
     (digest[offset + 3] & 0xff);
 
-  // max code: 0x7fffffff or 2147483647
-  const scale = 0x7fffffff / EMOJI_COUNT;
+  const emojiIndex = Math.floor(code % EMOJI_COUNT);
 
-  const emojiIndex = Math.floor(code / scale);
   return EMOJIS[emojiIndex];
 };
