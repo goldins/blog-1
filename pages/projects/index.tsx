@@ -8,7 +8,12 @@ export default () => (
     <H1>Projects</H1>
     <P>
       <Link href="/projects/bad-ux">
-        <A>Bad UX</A>
+        <A>Bad UX Series</A>
+      </Link>
+    </P>
+    <P>
+      <Link href="/projects/do-it-generator">
+        <A>&quot;Do it For Her&quot; Generator</A>
       </Link>
     </P>
   </VerticalContainer>
