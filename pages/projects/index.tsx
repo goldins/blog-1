@@ -7,13 +7,8 @@ export default () => (
   <VerticalContainer>
     <H1>Projects</H1>
     <P>
-      <Link href="/projects/bad-keyboard">
-        <A>Drag and Drop Keyboard</A>
-      </Link>
-    </P>
-    <P>
-      <Link href="/projects/e2fa">
-        <A>2🤬A</A>
+      <Link href="/projects/bad-ux">
+        <A>Bad UX</A>
       </Link>
     </P>
   </VerticalContainer>
