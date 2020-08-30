@@ -1,69 +1,122 @@
 import * as React from 'react';
-import { H2 } from '../../../components/General';
+import { H2, H3 } from '../../../components/General';
 
 import template from './template.png';
-import styled from '@emotion/styled';
+import styled, { WithTheme } from '@emotion/styled';
+import { Theme } from '../../../styles/defaultTheme';
 
-const Canvas = styled.canvas(({ x, y }: { x?: number; y?: number }) => ({
+const CONTAINER_WIDTH = 700;
+
+const Canvas = styled.canvas(({ x, y }: WithTheme<{ x?: number; y?: number }, Theme>) => ({
   position: 'absolute',
   left: y ?? 'auto',
-  top: x ?? 'auto'
+  top: x ?? 'auto',
+  zIndex: 1
 }));
 
-const AbsoluteContainer = styled.div(() => ({
+const AbsoluteContainer = styled.div(({ width }: WithTheme<{ width: number }, Theme>) => ({
   position: 'absolute',
   left: '50%',
-  marginLeft: -350
+  marginLeft: -width / 2
 }));
 
 // prettier-ignore
-const PLACEMENTS_POS = [
-  // [x1, y1], [x2, y2]
-  [[ 14, 106], [97,  264]],
-  [[  6, 550], [98,  694]],
-  [[112, 227], [148, 258]],
-  [[140, 190], [194, 234]],
-  [[130, 535], [299, 675]],
-  [[115, 449], [183, 563]],
-  [[203, 240], [274, 351]],
-  [[216, 104], [339, 280]],
-  [[275, 278], [494, 507]],
-  [[340,   5], [425,  88]],
-  [[344, 577], [460, 655]],
+const PLACEMENTS_POS: [number, number][][] = [
+  [[208,  24],  [528,  196]], // 0
+  [[1096, 6],   [1384, 194]], // 1
+  [[452,  224], [514,  290]], // 2
+  [[376,  278], [462,  384]], // 3
+  [[1064, 258], [1348, 594]], // 4
+  [[892,  226], [1122, 364]], // 5
+  [[478,  404], [696,  540]], // 6
+  [[206,  430], [552,  674]], // 7
+  [[552,  544], [1012, 984]], // 8
+  [[8,    676], [170,  844]], // 9
+  [[1148, 682], [1306, 914]]  // 10
 ];
+
+const getContext = (el: HTMLCanvasElement | null): CanvasRenderingContext2D => {
+  if (!el) {
+    throw new Error('missing element');
+  }
+
+  const context = el.getContext('2d');
+  if (!context) {
+    throw new Error('no context');
+  }
+
+  return context;
+};
+
+type UploadElementProps = {
+  x1: number;
+  x2: number;
+  y1: number;
+  y2: number;
+};
+
+const UploadElement = styled.div(
+  ({ theme, x1, y1, x2, y2 }: WithTheme<UploadElementProps, Theme>) => ({
+    position: 'absolute',
+    top: y1,
+    left: x1,
+    height: y2 - y1,
+    width: x2 - x1,
+    backgroundColor: theme.colors.white,
+    cursor: 'pointer',
+    border: `2px solid ${theme.colors.black}`,
+    '&:hover': {
+      backgroundColor: theme.colors.brand,
+      opacity: 0.6
+    },
+    zIndex: 2
+  })
+);
 
 export default () => {
   const canvasEl = React.useRef<HTMLCanvasElement>(null);
+  const [scaleFactor, setScaleFactor] = React.useState(1);
+  const [debugError, setDebugError] = React.useState('');
 
   React.useEffect(() => {
-    const { current: canvas } = canvasEl;
+    try {
+      const canvas = canvasEl.current;
 
-    if (!canvas) {
-      throw new Error('missing canvas');
+      if (!canvas) {
+        return;
+      }
+
+      const context = getContext(canvas);
+
+      const templateImg = new Image();
+      templateImg.src = template;
+      templateImg.onload = function () {
+        const { width: tplWidth, height: tplHeight } = templateImg;
+        const { width: canvasWidth } = canvas;
+
+        setScaleFactor(() => {
+          const newScale = canvasWidth / tplWidth;
+          const newCanvasHeight = tplHeight * newScale;
+          canvas.height = newCanvasHeight;
+          context.drawImage(templateImg, 0, 0, canvasWidth, newCanvasHeight);
+          return newScale;
+        });
+      };
+    } catch (e) {
+      setDebugError(e.message);
     }
-
-    const context = canvas.getContext('2d');
-
-    if (!context) {
-      throw new Error('missing context');
-    }
-
-    const templateImg = new Image();
-    templateImg.src = template;
-    templateImg.onload = function () {
-      PLACEMENTS_POS.forEach(([[x1, y1], [x2, y2]]) => {
-        context.drawImage(templateImg, y1, x1, y2 - y1, x2 - x1);
-      });
-
-      context.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
-    };
   }, []);
 
   return (
     <>
       <H2>&quot;Do It for Her&quot; Generator</H2>
-      <AbsoluteContainer>
-        <Canvas height={500} width={700} ref={canvasEl} />
+      {debugError ? <H3>{debugError}</H3> : null}
+      <AbsoluteContainer width={CONTAINER_WIDTH}>
+        {PLACEMENTS_POS.map(([[x1, y1], [x2, y2]], idx) => {
+          const [x1s, y1s, x2s, y2s] = [x1, y1, x2, y2].map((v) => v * scaleFactor);
+          return <UploadElement key={idx} x1={x1s} y1={y1s} x2={x2s} y2={y2s} />;
+        })}
+        <Canvas width={CONTAINER_WIDTH} ref={canvasEl} />
       </AbsoluteContainer>
     </>
   );
