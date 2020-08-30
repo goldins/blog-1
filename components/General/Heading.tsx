@@ -9,9 +9,25 @@ export const H2 = styled.h2(({ theme: { colors } }: { theme: Theme }) => ({
   color: colors.accent
 }));
 
-export const H3 = styled.h3(({ theme: { colors } }: { theme: Theme }) => ({
-  color: colors.accent
-}));
+type VARIANTS = 'normal' | 'excited' | 'error' | 'warning';
+
+// TODO: generalize
+export const H3 = styled.h3(
+  ({ theme: { colors }, variant = 'normal' }: { theme: Theme } & { variant?: VARIANTS }) => ({
+    color: (() => {
+      switch (variant) {
+        case 'error':
+          return colors.error;
+        case 'warning':
+          return colors.warning;
+        case 'excited':
+          return colors.accent;
+        default:
+          return colors.brand;
+      }
+    })()
+  })
+);
 
 interface PProps extends React.HTMLAttributes<HTMLParagraphElement>, SizeProps {}
 
