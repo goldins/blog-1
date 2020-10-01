@@ -9,6 +9,7 @@ const colors = {
   accent: '#ffb238',
   success: '#37b635',
   error: '#ec1818',
+  warning: '#ec7418',
   ui: {
     bright: '#d9d9d9',
     light: '#f5f3f7',
