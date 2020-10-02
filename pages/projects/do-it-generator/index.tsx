@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styled, { WithTheme } from '@emotion/styled';
+import styled, { WithTheme, CSSObject } from '@emotion/styled';
 import { useTheme } from 'emotion-theming';
 
 import { Button, H2, H3 } from '../../../components/General';
@@ -57,10 +57,7 @@ type PositionProps = {
   y2: number;
 };
 
-// todo: what should this be?
-type EmotionStyleObject = any;
-
-const positionAbsolutely = ({ x1, y1, x2, y2 }: PositionProps): EmotionStyleObject => ({
+const positionAbsolutely = ({ x1, y1, x2, y2 }: PositionProps): CSSObject => ({
   position: 'absolute',
   top: y1,
   left: x1,
@@ -68,7 +65,7 @@ const positionAbsolutely = ({ x1, y1, x2, y2 }: PositionProps): EmotionStyleObje
   width: x2 - x1
 });
 
-const commonImageStyles = (theme: Theme): EmotionStyleObject => ({
+const commonImageStyles = (theme: Theme): CSSObject => ({
   overflow: 'hidden',
   backgroundColor: theme.colors.white,
   cursor: 'pointer',
@@ -293,13 +290,16 @@ export default () => {
         const renderWidth = x2s - x1s;
         const renderHeight = y2s - y1s;
 
+        // both sides!
+        const BORDER_WIDTH = 2;
+
         const renderRatio = renderWidth / renderHeight;
         const imgRatio = natWidth / natHeight;
 
         const fitAxis = renderRatio > imgRatio ? 'width' : 'height';
 
         const fitSize = {
-          sWidth: fitAxis === 'width' ? natWidth : natWidth / renderRatio,
+          sWidth: fitAxis === 'width' ? natWidth : natWidth * renderRatio,
           sHeight: fitAxis === 'height' ? natHeight : natHeight / renderRatio
         };
 
@@ -307,8 +307,8 @@ export default () => {
           ...fitSize,
           sx: fitAxis === 'width' ? 0 : (natWidth - fitSize.sWidth) / 2,
           sy: fitAxis === 'height' ? 0 : (natHeight - fitSize.sHeight) / 2,
-          dx: x1s + 2,
-          dy: y1s + 2,
+          dx: x1s + BORDER_WIDTH,
+          dy: y1s + BORDER_WIDTH,
           dWidth: renderWidth,
           dHeight: renderHeight
         };
