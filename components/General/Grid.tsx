@@ -1,12 +1,15 @@
-import styled, { WithTheme } from '@emotion/styled';
-import { SizeProps, Theme } from '../../styles/defaultTheme';
-interface Props extends React.InputHTMLAttributes<HTMLDivElement>, SizeProps {
+import { InputHTMLAttributes } from 'react';
+import styled from '@emotion/styled';
+import { SizeProps } from '../../styles/defaultTheme';
+import { Theme } from '@emotion/react';
+
+interface Props extends InputHTMLAttributes<HTMLDivElement>, SizeProps {
   container?: boolean;
   item?: boolean;
 }
 
-export const Grid = styled('div')<WithTheme<Props, Theme>>(
-  ({ theme, sz = 'md', container = false, item = false }) => ({
+export const Grid = styled('div')(
+  ({ theme, sz = 'md', container = false, item = false }: { theme: Theme } & Props) => ({
     display: container ? 'flex' : 'initial',
     flex: item ? '1 1' : 'initial',
     ...(sz === 'sm'

@@ -22,7 +22,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     ({ secret, token, timeStep = 5, timeWindow = 2 } = JSON.parse(req.body));
   } catch (e) {
     res.statusCode = 400;
-    res.json({ error: e.message });
+    res.json({ error: e instanceof Error ? e.message : 'Unknown error' });
     return;
   }
 

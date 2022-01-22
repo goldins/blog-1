@@ -1,11 +1,13 @@
-import { SizeProps, Theme } from '../../../styles/defaultTheme';
-import styled, { WithTheme } from '@emotion/styled';
+import type { InputHTMLAttributes } from 'react';
+import { Theme } from '@emotion/react';
+import { SizeProps } from '../../../styles/defaultTheme';
+import styled from '@emotion/styled';
 
-interface Props extends React.InputHTMLAttributes<HTMLInputElement>, SizeProps {
+interface Props extends InputHTMLAttributes<HTMLInputElement>, SizeProps {
   label?: React.ReactNode;
 }
 
-export const StyledTextInput = styled('input')<WithTheme<Props, Theme>>(
+export const StyledTextInput = styled('input')(
   {
     letterSpacing: 1,
     borderStyle: 'solid',
@@ -15,7 +17,7 @@ export const StyledTextInput = styled('input')<WithTheme<Props, Theme>>(
     },
     padding: `0 .25em`
   },
-  ({ theme, sz = 'md', disabled = false }) => ({
+  ({ theme, sz = 'md', disabled = false }: { theme: Theme } & Props) => ({
     ...(sz === 'sm'
       ? {
           fontSize: theme.dimensions.fontSize.small,

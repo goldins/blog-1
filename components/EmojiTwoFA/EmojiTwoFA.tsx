@@ -66,8 +66,8 @@ export const EmojiTwoFA = () => {
     try {
       await verify(secret, codeInput, timeStep, timeWindow);
       setSuccess('Success!');
-    } catch (e) {
-      setError(e.message);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Unknown error');
     }
   };
 
