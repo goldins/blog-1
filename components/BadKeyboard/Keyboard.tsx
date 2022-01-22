@@ -1,4 +1,5 @@
 import React, { Dispatch, DragEvent, memo, MouseEvent } from 'react';
+import { useTheme } from '@emotion/react';
 
 import { CharKey, KeyRow, KeyRowsContainer } from './Keys';
 import useKeyboardReducer, {
@@ -12,7 +13,6 @@ import useKeyboardReducer, {
   updateCharShift
 } from './useKeyboard';
 import { Theme } from '../../styles/defaultTheme';
-import { useTheme } from 'emotion-theming';
 
 // prettier-ignore
 const ROW_1 = {
@@ -247,7 +247,7 @@ const expandRow = (pre: CHAR[] = [], row: Modifiers, post: CHAR[] = []): RowKeys
 };
 
 export const Keyboard = () => {
-  const theme = useTheme<Theme>();
+  const theme = useTheme();
   const [state, dispatch] = useKeyboardReducer();
   const [small, setSmall] = React.useState(false);
   const [rows, setRows] = React.useState<KeyWithMeta[][]>([]);

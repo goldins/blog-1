@@ -1,3 +1,4 @@
+import { Theme } from '@emotion/react';
 import facepaint from 'facepaint';
 
 export interface SizeProps {
@@ -5,8 +6,8 @@ export interface SizeProps {
 }
 
 const colors = {
-  brand: '#46e2b6',
-  accent: '#ffb238',
+  brand: '#2c8d72',
+  accent: '#ff8a15',
   success: '#37b635',
   error: '#ec1818',
   warning: '#ec7418',
@@ -78,7 +79,7 @@ const heights = {
 
 const mq = facepaint(Object.values(breakpoints).map((bp) => `@media (min-width: ${bp}px)`));
 
-export const defaultTheme = {
+export const defaultTheme: Theme = {
   colors,
   fonts,
   breakpoints,
@@ -87,5 +88,3 @@ export const defaultTheme = {
   heights,
   mq
 };
-
-export type Theme = typeof defaultTheme;

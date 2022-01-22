@@ -1,9 +1,7 @@
 import * as React from 'react';
-import { ThemeProvider } from 'emotion-theming';
-
+import { Global, ThemeProvider } from '@emotion/react';
 import { Container } from '../components/Container';
 import { defaultTheme } from '../styles/defaultTheme';
-import { Global } from '@emotion/core';
 import normalize from '../styles/normalize';
 import { SiteHead } from '../components/SiteHead';
 
