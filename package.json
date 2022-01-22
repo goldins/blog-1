@@ -1,6 +1,10 @@
 {
-  "name": "with-typescript-eslint-jest",
-  "author": "@erikdstock",
+  "// based from": {
+    "name": "with-typescript-eslint-jest",
+    "author": "@erikdstock"
+  },
+  "name": "goldins-blog-alpha",
+  "author": "@goldins",
   "license": "MIT",
   "version": "1.0.0",
   "scripts": {
