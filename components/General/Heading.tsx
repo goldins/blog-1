@@ -1,11 +1,12 @@
-import styled, { WithTheme } from '@emotion/styled';
-import { SizeProps, Theme } from '../../styles/defaultTheme';
+import { Theme, WithTheme } from '@emotion/react';
+import styled from '@emotion/styled';
+import { SizeProps } from '../../styles/defaultTheme';
 
-export const H1 = styled.h1(({ theme: { colors } }: { theme: Theme }) => ({
+export const H1 = styled.h1(({ theme: { colors } }) => ({
   color: colors.accent
 }));
 
-export const H2 = styled.h2(({ theme: { colors } }: { theme: Theme }) => ({
+export const H2 = styled.h2(({ theme: { colors } }) => ({
   color: colors.accent
 }));
 

@@ -1,9 +1,8 @@
 import * as React from 'react';
-import styled, { WithTheme, CSSObject } from '@emotion/styled';
-import { useTheme } from 'emotion-theming';
+import styled, { CSSObject } from '@emotion/styled';
+import { Theme, useTheme, WithTheme } from '@emotion/react';
 
 import { Button, H2, H3 } from '../../../components/General';
-import { Theme } from '../../../styles/defaultTheme';
 
 import template from './template.png';
 
@@ -120,7 +119,7 @@ type UploadElementProps = PositionProps & {
 const scaleValues = (scaleFactor: number, numbers: number[]) => numbers.map((n) => n * scaleFactor);
 
 const UploadElement = ({ src, uniqueId, onSelect, ...rest }: UploadElementProps) => {
-  const theme = useTheme<Theme>();
+  const theme = useTheme();
 
   const uploadEl = React.useRef<HTMLInputElement>(null);
 
@@ -229,7 +228,7 @@ export default () => {
       const context = getContext(canvas);
 
       const templateImg = new Image();
-      templateImg.src = template;
+      templateImg.src = template.src;
       templateImg.onload = () => {
         const { width: tplWidth, height: tplHeight } = templateImg;
         const { width: canvasWidth } = canvas;
@@ -243,7 +242,7 @@ export default () => {
           return newScale;
         });
       };
-    } catch (e) {
+    } catch (e: any) {
       setDebugError(e.message);
     }
   }, []);
@@ -314,7 +313,7 @@ export default () => {
         };
 
         context.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-        resolve();
+        resolve(void 0);
       };
     });
   };
@@ -335,7 +334,7 @@ export default () => {
 
     await Promise.all(imgPromises);
     const templateImg = new Image();
-    templateImg.src = template;
+    templateImg.src = template.src;
     templateImg.onload = () => {
       const canvasWidth = canvas?.width ?? 0;
       const canvasHeight = canvas?.height ?? 0;

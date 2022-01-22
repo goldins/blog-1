@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { Theme } from '../../styles/defaultTheme';
 
 export const FormContainer = styled('form')(
   {
@@ -11,7 +10,7 @@ export const FormContainer = styled('form')(
       marginBottom: '.5rem'
     }
   },
-  ({ theme }: { theme: Theme }) => ({
+  ({ theme }) => ({
     [`@media(max-width: ${theme.breakpoints.sm}px)`]: {
       marginBottom: 0,
       height: '40%',
