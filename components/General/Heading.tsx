@@ -1,4 +1,4 @@
-import { Theme, WithTheme } from '@emotion/react';
+import { Theme } from '@emotion/react';
 import styled from '@emotion/styled';
 import { SizeProps } from '../../styles/defaultTheme';
 
@@ -30,9 +30,7 @@ export const H3 = styled.h3(
   })
 );
 
-interface PProps extends React.HTMLAttributes<HTMLParagraphElement>, SizeProps {}
-
-export const P = styled('p')<WithTheme<PProps, Theme>>(({ theme, sz = 'md' }) => ({
+export const P = styled('p')(({ theme, sz = 'md' }: { theme: Theme } & SizeProps) => ({
   ...(sz === 'sm'
     ? {
         fontSize: theme.dimensions.fontSize.small,
