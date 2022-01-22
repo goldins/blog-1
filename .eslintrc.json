@@ -5,9 +5,13 @@
     "sourceType": "module"
   },
   "plugins": ["@typescript-eslint"],
-  "extends": ["prettier", "next/core-web-vitals", "eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:react-hooks/recommended",
+  "extends": [
     "prettier",
-    "prettier/@typescript-eslint"],
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react-hooks/recommended"
+  ],
   "ignorePatterns": ["out_functions", "out_publish"],
   "settings": {
     "react": {
