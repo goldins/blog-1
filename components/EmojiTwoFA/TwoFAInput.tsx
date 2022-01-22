@@ -1,7 +1,7 @@
-import * as React from 'react';
-import styled, { WithTheme } from '@emotion/styled';
+import type { ChangeEventHandler } from 'react';
+import styled from '@emotion/styled';
+import { Theme } from '@emotion/react';
 import { TextField } from '../General/Inputs';
-import { Theme } from '../../styles/defaultTheme';
 
 const TwoFATextInput = styled(TextField)(
   {
@@ -10,7 +10,7 @@ const TwoFATextInput = styled(TextField)(
     lineHeight: 1.3,
     border: 'none'
   },
-  ({ theme, size }: WithTheme<{ size: number }, Theme>) => ({
+  ({ theme, size }: { theme: Theme } & { size: number }) => ({
     borderBottom: `2px solid ${theme.colors.brand}`,
     borderRadius: 0,
     fontSize: theme.dimensions.fontSize.large * 4,
@@ -22,6 +22,6 @@ const TwoFATextInput = styled(TextField)(
 
 export const TwoFAInput = (props: {
   size: number;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  onChange: ChangeEventHandler<HTMLInputElement>;
   maxLength?: number;
 }) => <TwoFATextInput autoFocus sz="lg" {...props} />;

@@ -242,8 +242,8 @@ export default () => {
           return newScale;
         });
       };
-    } catch (e: any) {
-      setDebugError(e.message);
+    } catch (e) {
+      setDebugError(e instanceof Error ? e.message : 'Unknown error');
     }
   }, []);
 

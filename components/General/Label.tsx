@@ -1,13 +1,14 @@
-import { SizeProps, Theme } from '../../styles/defaultTheme';
-import styled, { WithTheme } from '@emotion/styled';
+import { Theme } from '@emotion/react';
+import { SizeProps } from '../../styles/defaultTheme';
+import styled from '@emotion/styled';
 
 interface Props extends React.LabelHTMLAttributes<HTMLLabelElement>, SizeProps {}
 
-export const StyledLabel = styled('label')<WithTheme<Props, Theme>>(
+export const StyledLabel = styled('label')(
   {
     padding: `0 .25em`
   },
-  ({ theme, sz = 'md' }) => ({
+  ({ theme, sz = 'md' }: { theme: Theme } & Props) => ({
     ...(sz === 'sm'
       ? {
           fontSize: theme.dimensions.fontSize.small,

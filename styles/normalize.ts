@@ -1,4 +1,4 @@
-import { Theme } from './defaultTheme';
+import { Theme } from '@emotion/react';
 import { CSSObject } from '@emotion/serialize';
 
 export default (theme: Theme): CSSObject => ({

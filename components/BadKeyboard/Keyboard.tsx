@@ -1,4 +1,4 @@
-import React, { Dispatch, DragEvent, memo, MouseEvent } from 'react';
+import { Dispatch, DragEvent, memo, MouseEvent, useState, useEffect } from 'react';
 import { useTheme } from '@emotion/react';
 
 import { CharKey, KeyRow, KeyRowsContainer } from './Keys';
@@ -12,7 +12,6 @@ import useKeyboardReducer, {
   updateCharAlt,
   updateCharShift
 } from './useKeyboard';
-import { Theme } from '../../styles/defaultTheme';
 
 // prettier-ignore
 const ROW_1 = {
@@ -86,7 +85,12 @@ interface RowKeysProps extends StateProps {
   small: boolean;
 }
 
-const toggleCharState = (e: DragEvent<HTMLElement>, v: KeyWithMeta, state: UseKeyboard, dispatch: Dispatch<Action>) => {
+const toggleCharState = (
+  e: DragEvent<HTMLElement>,
+  v: KeyWithMeta,
+  state: UseKeyboard,
+  dispatch: Dispatch<Action>
+) => {
   e.preventDefault();
   e.stopPropagation();
   const {
@@ -105,7 +109,11 @@ const toggleCharState = (e: DragEvent<HTMLElement>, v: KeyWithMeta, state: UseKe
   }
 };
 
-const resetKey = (e: DragEvent<HTMLElement> | MouseEvent<HTMLElement>, v: KeyWithMeta, dispatch: Dispatch<Action>) => {
+const resetKey = (
+  e: DragEvent<HTMLElement> | MouseEvent<HTMLElement>,
+  v: KeyWithMeta,
+  dispatch: Dispatch<Action>
+) => {
   dispatch(updateCharAlt(v.modified.normal, false));
   dispatch(updateCharShift(v.modified.normal, false));
 };
@@ -138,7 +146,8 @@ const onDragStart = (e: DragEvent<HTMLElement>, dispatch: Dispatch<Action>) => {
 };
 
 const getDataValue = ({ modified }: KeyWithMeta, state: UseKeyboard): string => {
-  const { alt = false, shift = false } = modified.normal in state.keys ? state.keys[modified.normal] : {};
+  const { alt = false, shift = false } =
+    modified.normal in state.keys ? state.keys[modified.normal] : {};
   switch (true) {
     case alt && shift:
       return modified.shiftAlt;
@@ -171,30 +180,37 @@ const RowKeys = memo(({ row, state, dispatch, small }: RowKeysProps) => {
   return (
     <KeyRow>
       {row
-        .reduce((acc: (KeyWithMeta & { width: number; displayValue: string; dataValue: string })[], key) => {
-          if (acc.length >= 1 && acc[acc.length - 1].modified.normal === key.modified.normal) {
-            const newVal = acc.pop();
-            if (!newVal) {
-              throw new Error('No item found');
+        .reduce(
+          (
+            acc: (KeyWithMeta & { width: number; displayValue: string; dataValue: string })[],
+            key
+          ) => {
+            if (acc.length >= 1 && acc[acc.length - 1].modified.normal === key.modified.normal) {
+              const newVal = acc.pop();
+              if (!newVal) {
+                throw new Error('No item found');
+              }
+              newVal.width++;
+              return [...acc, newVal];
             }
-            newVal.width++;
-            return [...acc, newVal];
-          }
 
-          const dataValue = getDataValue(key, state);
-          const displayValue = getDisplayValue(dataValue, small);
+            const dataValue = getDataValue(key, state);
+            const displayValue = getDisplayValue(dataValue, small);
 
-          const newItem = {
-            ...key,
-            dataValue,
-            displayValue,
-            width: 1
-          };
+            const newItem = {
+              ...key,
+              dataValue,
+              displayValue,
+              width: 1
+            };
 
-          return [...acc, newItem];
-        }, [])
+            return [...acc, newItem];
+          },
+          []
+        )
         .map((v, i) => {
-          const hasHighlight = (v.acceptsAlt && state.modifiers.alt) || (v.acceptsShift && state.modifiers.shift);
+          const hasHighlight =
+            (v.acceptsAlt && state.modifiers.alt) || (v.acceptsShift && state.modifiers.shift);
           return (
             <CharKey
               data-value={v.dataValue}
@@ -249,10 +265,10 @@ const expandRow = (pre: CHAR[] = [], row: Modifiers, post: CHAR[] = []): RowKeys
 export const Keyboard = () => {
   const theme = useTheme();
   const [state, dispatch] = useKeyboardReducer();
-  const [small, setSmall] = React.useState(false);
-  const [rows, setRows] = React.useState<KeyWithMeta[][]>([]);
+  const [small, setSmall] = useState(false);
+  const [rows, setRows] = useState<KeyWithMeta[][]>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (document.body.clientWidth < theme.breakpoints.sm) {
       setSmall(true);
 

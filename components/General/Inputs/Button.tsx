@@ -1,17 +1,19 @@
-import styled, { WithTheme } from '@emotion/styled';
+import type { ButtonHTMLAttributes } from 'react';
+import { Theme } from '@emotion/react';
+import styled from '@emotion/styled';
 import { darken } from 'polished';
-import { SizeProps, Theme } from '../../../styles/defaultTheme';
+import { SizeProps } from '../../../styles/defaultTheme';
 
-interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement>, SizeProps {}
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement>, SizeProps {}
 
-export const Button = styled('button')<WithTheme<Props, Theme>>(
+export const Button = styled('button')(
   {
     letterSpacing: 2,
     cursor: 'pointer',
     outline: 'none',
     border: 'none'
   },
-  ({ theme, sz = 'md', disabled = false }) => ({
+  ({ theme, sz = 'md', disabled = false }: { theme: Theme } & Props) => ({
     ...(sz === 'sm'
       ? {
           fontSize: theme.dimensions.fontSize.small,
