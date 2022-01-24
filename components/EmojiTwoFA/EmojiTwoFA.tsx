@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 
 import { Button, H3, P, TextField } from '../General';
 
@@ -9,13 +9,13 @@ import { TwoFAInput } from './TwoFAInput';
 
 enum Step {
   GENERATE,
-  GENERATED
+  GENERATED,
 }
 
 const verify = async (secret: string, token: string, timeStep: number, timeWindow: number) => {
   const resp = await fetch('/api/2fa/verify', {
     body: JSON.stringify({ secret, token, timeStep, timeWindow }),
-    method: 'POST'
+    method: 'POST',
   });
 
   const data = await resp.json();
@@ -37,28 +37,30 @@ const fetchSecret = async (): Promise<string> => {
 };
 
 export const EmojiTwoFA = () => {
-  const [error, setError] = React.useState('');
-  const [success, setSuccess] = React.useState('');
-  const [codeInput, setCodeInput] = React.useState('');
-  const [token, setToken] = React.useState('');
-  const [secret, setSecret] = React.useState('');
-  const [step, setStep] = React.useState(Step.GENERATE);
-  const [timeStep, setTimeStep] = React.useState(TIME_STEP);
-  const [timeWindow, setTimeWindow] = React.useState(TIME_WINDOW);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [codeInput, setCodeInput] = useState('');
+  const [token, setToken] = useState('');
+  const [secret, setSecret] = useState('');
+  const [step, setStep] = useState(Step.GENERATE);
+  const [timeStep, setTimeStep] = useState(TIME_STEP);
+  const [timeWindow, setTimeWindow] = useState(TIME_WINDOW);
 
-  const submitGenerate = async (e: React.FormEvent) => {
+  const intervalRef = useRef<number | null>(null);
+
+  const submitGenerate = async (e: FormEvent) => {
     e.preventDefault();
     const data = await fetchSecret();
     setSecret(data);
     setToken(getToken(data, timeStep));
     setStep(Step.GENERATED);
-    window.setInterval(() => {
+    intervalRef.current = window.setInterval(() => {
       const newToken = getToken(data, timeStep);
       setToken(newToken);
     }, timeStep * 1000);
   };
 
-  const verifyClick = async (e: React.FormEvent | React.MouseEvent) => {
+  const verifyClick = async (e: FormEvent | MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setError('');
@@ -70,6 +72,12 @@ export const EmojiTwoFA = () => {
       setError(e instanceof Error ? e.message : 'Unknown error');
     }
   };
+
+  useEffect(() => {
+    if (intervalRef.current) {
+      window.clearInterval(intervalRef.current);
+    }
+  }, []);
 
   return (
     <>

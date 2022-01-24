@@ -6,7 +6,7 @@ import { Footer } from '../components/General/Footer';
 
 const EASTER = false;
 
-export default () => {
+const Pages = () => {
   return (
     <VerticalContainer>
       <main>
@@ -14,12 +14,12 @@ export default () => {
       </main>
 
       <P>
-        <Link href="/blog">
+        <Link href="/blog" passHref>
           <A>Blog</A>
         </Link>
       </P>
       <P>
-        <Link href="/projects">
+        <Link href="/projects" passHref>
           <A>Projects</A>
         </Link>
       </P>
@@ -29,3 +29,5 @@ export default () => {
     </VerticalContainer>
   );
 };
+
+export default Pages;
