@@ -1,7 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import pdfFile from './PDF14.pdf';
+import pdfFile from '../../../assets/pdf-guard/PDF14.pdf';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
@@ -18,11 +16,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.json({ error: 'Unauthorized.' });
   }
 
-  res.setHeader('Content-disposition', 'attachment; filename=article.pdf');
-  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-disposition', 'attachment; filename="file.pdf"');
+  res.setHeader('Content-Type', 'application/pdf; charset=binary');
 
   try {
-    res.end(pdfFile);
+    res.end(pdfFile, 'binary');
   } catch {
     res.removeHeader('Content-disposition');
     res.removeHeader('Content-Type');

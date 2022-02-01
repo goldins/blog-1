@@ -23,11 +23,7 @@ out
 out_functions
 out_publish
 
-# https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
+# leftover from messing with yarn versions
+# netlify doesn't support yarn 2+ yet so I had to downgrade
+# back to 1 for this project while having yarn 3 installed globally.
 .yarn/*
-!.yarn/cache
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions

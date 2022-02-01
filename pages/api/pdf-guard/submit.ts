@@ -48,7 +48,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const data = new RequestData(name, agency, company, role, +salaryMin, equity, bonus, remote);
 
-  const errors = null; // data.validate();
+  const errors = data.validate();
 
   if (!errors) {
     res.statusCode = 200;

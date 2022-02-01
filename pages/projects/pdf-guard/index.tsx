@@ -2,6 +2,7 @@
 import { FormEventHandler, useState } from 'react';
 import { Button, FormContainer, TextField } from '../../../components/General';
 import { CheckboxField } from '../../../components/General/Inputs/CheckboxField';
+import { Tooltip } from '../../../components/General/Tooltip';
 
 const FORM_LABEL_WIDTH = '25vw';
 const FORM_INPUT_WIDTH = '25vw';
@@ -60,9 +61,13 @@ const PdfGuard = () => {
 
       const pdfTxt = await resp.text();
 
-      const pdfContent = new Blob([pdfTxt], { type: 'application/pdf' });
+      const cleaned = window.atob(
+        pdfTxt.slice('data:application/pdf;charset=utf-8;base64,'.length, Infinity)
+      );
 
-      setPdfUrl(window.URL.createObjectURL(pdfContent));
+      const blob = new Blob([cleaned], { type: 'application/pdf' });
+
+      setPdfUrl(window.URL.createObjectURL(blob));
       // const tab = window.open();
       // if (tab) {
       //  tab.location.href = fileURL;
@@ -140,15 +145,17 @@ const PdfGuard = () => {
         value={info.equity}
         onChange={(e) => patchInfo('equity', e.target.value)}
       />
-      <CheckboxField
-        sz="md"
-        name="remote"
-        label="Remote?"
-        labelWidth={FORM_LABEL_WIDTH}
-        checked={info.remote}
-        readOnly
-        helpText="Only looking for remote positions."
-      />
+      <Tooltip content="Remote-only GMT-5 ± 1" position="right">
+        <CheckboxField
+          sz="md"
+          name="remote"
+          label="Remote?"
+          labelWidth={FORM_LABEL_WIDTH}
+          checked={info.remote}
+          readOnly
+          helpText="Only looking for remote positions."
+        />
+      </Tooltip>
       <Button sz="lg" type="submit">
         Submit
       </Button>

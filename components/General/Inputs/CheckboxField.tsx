@@ -8,13 +8,7 @@ import * as React from 'react';
 import { Grid } from '../Grid';
 import { P } from '../Heading';
 import { Property } from 'csstype';
-
-interface Props extends InputHTMLAttributes<HTMLInputElement>, SizeProps {
-  label?: ReactNode;
-  helpText?: React.ReactNode;
-  labelWidth?: Property.Width;
-  inputWidth?: Property.Width;
-}
+import { forwardRef } from 'react';
 
 const StyledCheckbox = styled('input')(
   ({ theme, sz = 'md', disabled = false }: { theme: Theme } & Props) => ({
@@ -40,41 +34,44 @@ const StyledCheckbox = styled('input')(
   })
 );
 
-export const CheckboxField = ({
-  sz,
-  helpText,
-  label,
-  labelWidth = 'auto',
-  inputWidth = 'auto',
-  ...rest
-}: Props) => {
-  const type = 'checkbox';
-  const lowerSz = sz === 'md' ? 'sm' : sz === 'lg' ? 'md' : 'md';
+interface Props extends InputHTMLAttributes<HTMLInputElement>, SizeProps {
+  label?: ReactNode;
+  helpText?: React.ReactNode;
+  labelWidth?: Property.Width;
+  inputWidth?: Property.Width;
+}
 
-  return (
-    <Grid
-      gridTemplateColumns="1fr 1fr"
-      gridTemplateRows="1fr 1fr"
-      gridTemplateAreas={`"${label ? 'label' : 'checkbox'} checkbox" ${
-        helpText ? '"helpText helpText"' : ''
-      }`}
-    >
-      {label ? (
-        <StyledLabel css={{ width: labelWidth, gridArea: 'label' }} sz={sz}>
-          {label}
-        </StyledLabel>
-      ) : null}
-      <StyledCheckbox
-        css={{ width: inputWidth, gridArea: 'checkbox' }}
-        {...rest}
-        sz={sz}
-        type={type}
-      />
-      {helpText ? (
-        <P css={{ gridArea: 'helpText', marginBottom: 0 }} sz={lowerSz}>
-          {helpText}
-        </P>
-      ) : null}
-    </Grid>
-  );
-};
+export const CheckboxField = forwardRef<HTMLInputElement, Props>(
+  ({ sz, helpText, label, labelWidth = 'auto', inputWidth = 'auto', ...rest }, ref) => {
+    const type = 'checkbox';
+    const lowerSz = sz === 'md' ? 'sm' : sz === 'lg' ? 'md' : 'md';
+
+    return (
+      <Grid
+        gridTemplateColumns="1fr 1fr"
+        gridTemplateRows="1fr 1fr"
+        gridTemplateAreas={`"${label ? 'label' : 'checkbox'} checkbox" ${
+          helpText ? '"helpText helpText"' : ''
+        }`}
+      >
+        {label ? (
+          <StyledLabel css={{ width: labelWidth, gridArea: 'label' }} sz={sz}>
+            {label}
+          </StyledLabel>
+        ) : null}
+        <StyledCheckbox
+          css={{ width: inputWidth, gridArea: 'checkbox' }}
+          ref={ref}
+          {...rest}
+          sz={sz}
+          type={type}
+        />
+        {helpText ? (
+          <P css={{ gridArea: 'helpText', marginBottom: 0 }} sz={lowerSz}>
+            {helpText}
+          </P>
+        ) : null}
+      </Grid>
+    );
+  }
+);
