@@ -48,8 +48,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
   const { name, agency, company, role, salaryMin, equity, bonus, remote } = JSON.parse(req.body);
 
+  const formattedSalary = Number(salaryMin.replace(/[,.]/g, '').replace('k', '000'));
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const data = new RequestData(name, agency, company, role, +salaryMin, equity, bonus, remote);
+  const data = new RequestData(name, agency, company, role, formattedSalary, equity, bonus, remote);
 
   const errors = data.validate();
 
