@@ -92,11 +92,11 @@ const PdfGuard = () => {
       />
       <TextField
         name="agency"
-        label="Recruitment Firm"
+        label="Sourcing Partner"
         sz="md"
         labelWidth={FORM_LABEL_WIDTH}
         inputWidth={FORM_INPUT_WIDTH}
-        helpText={errors.agency ?? ''}
+        helpText={errors.agency ?? 'Talent sourcing partner, if external.'}
         helpIntent={errors.agency ? 'error' : 'none'}
         value={info.agency}
         onChange={(e) => patchInfo('agency', e.target.value)}
@@ -114,22 +114,22 @@ const PdfGuard = () => {
       />
       <TextField
         name="role"
-        label="Position/Role"
+        label="Role(s)"
         sz="md"
         labelWidth={FORM_LABEL_WIDTH}
         inputWidth={FORM_INPUT_WIDTH}
-        helpText={errors.role ?? "Role or roles you're looking to fill."}
+        helpText={errors.role ?? 'Open position or positions.'}
         helpIntent={errors.role ? 'error' : 'none'}
         value={info.role}
         onChange={(e) => patchInfo('role', e.target.value)}
       />
       <TextField
         name="salaryMin"
-        label="Salary min"
+        label="Salary (minimum)"
         sz="md"
         labelWidth={FORM_LABEL_WIDTH}
         inputWidth={FORM_INPUT_WIDTH}
-        helpText={errors.salaryMin ?? 'USD'}
+        helpText={errors.salaryMin ?? 'Approximate start of range (USD)'}
         helpIntent={errors.salaryMin ? 'error' : 'none'}
         value={info.salaryMin}
         onChange={(e) => patchInfo('salaryMin', e.target.value)}
