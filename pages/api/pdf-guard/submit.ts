@@ -1,9 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 class RequestData {
-  public static readonly REQUIRED: ('name' | 'agency' | 'company' | 'salaryMin')[] = [
+  public static readonly REQUIRED: ('name' | 'company' | 'salaryMin')[] = [
     'name',
-    'agency',
     'company',
     'salaryMin',
   ];
@@ -31,6 +30,10 @@ class RequestData {
       errors.salaryMin = 'Malformed.';
     } else if (this.salaryMin < 50_000) {
       errors.salaryMin = 'Too low.';
+    }
+
+    if (!this.remote) {
+      errors.remote = 'Nice try.';
     }
 
     return Object.keys(errors).length ? errors : null;
