@@ -31,7 +31,7 @@ const PdfGuard = () => {
   const [errors, setErrors] = useState<Partial<Record<keyof FormInfo, string>>>({});
   const [pdfUrl, setPdfUrl] = useState('');
 
-  const patchInfo = <T extends keyof FormInfo>(key: T, value: string) => {
+  const patchInfo = <T extends keyof FormInfo>(key: T, value: unknown) => {
     setErrors((currentErrors) => ({
       ...currentErrors,
       [key]: null,
@@ -80,80 +80,71 @@ const PdfGuard = () => {
   ) : (
     <FormContainer onSubmit={handleSubmit}>
       <TextField
-        sz="md"
+        name="name"
         label="Name"
+        sz="md"
         labelWidth={FORM_LABEL_WIDTH}
         inputWidth={FORM_INPUT_WIDTH}
         helpText={errors.name ?? 'Your name.'}
         helpIntent={errors.name ? 'error' : 'none'}
-        name="name"
         value={info.name}
         onChange={(e) => patchInfo('name', e.target.value)}
       />
       <TextField
-        sz="md"
+        name="agency"
         label="Recruitment Firm"
+        sz="md"
         labelWidth={FORM_LABEL_WIDTH}
         inputWidth={FORM_INPUT_WIDTH}
         helpText={errors.agency ?? ''}
         helpIntent={errors.agency ? 'error' : 'none'}
-        name="agency"
         value={info.agency}
         onChange={(e) => patchInfo('agency', e.target.value)}
       />
       <TextField
-        sz="md"
+        name="company"
         label="Company"
+        sz="md"
         labelWidth={FORM_LABEL_WIDTH}
         inputWidth={FORM_INPUT_WIDTH}
         helpText={errors.company ?? 'Company looking to fill this role.'}
         helpIntent={errors.company ? 'error' : 'none'}
-        name="company"
         value={info.company}
         onChange={(e) => patchInfo('company', e.target.value)}
       />
       <TextField
-        sz="md"
+        name="role"
         label="Position/Role"
+        sz="md"
         labelWidth={FORM_LABEL_WIDTH}
         inputWidth={FORM_INPUT_WIDTH}
         helpText={errors.role ?? "Role or roles you're looking to fill."}
         helpIntent={errors.role ? 'error' : 'none'}
-        name="role"
         value={info.role}
         onChange={(e) => patchInfo('role', e.target.value)}
       />
       <TextField
-        sz="md"
+        name="salaryMin"
         label="Salary min"
+        sz="md"
         labelWidth={FORM_LABEL_WIDTH}
         inputWidth={FORM_INPUT_WIDTH}
         helpText={errors.salaryMin ?? 'USD'}
         helpIntent={errors.salaryMin ? 'error' : 'none'}
-        name="salaryMin"
         value={info.salaryMin}
         onChange={(e) => patchInfo('salaryMin', e.target.value)}
       />
-      <TextField
-        sz="md"
-        label="Equity"
-        labelWidth={FORM_LABEL_WIDTH}
-        inputWidth={FORM_INPUT_WIDTH}
-        helpText={errors.equity ?? 'USD or %'}
-        helpIntent={errors.equity ? 'error' : 'none'}
-        name="equity"
-        value={info.equity}
-        onChange={(e) => patchInfo('equity', e.target.value)}
-      />
       <Tooltip content="Remote-only GMT-5 ± 1" position="right">
         <CheckboxField
-          sz="md"
           name="remote"
           label="Remote?"
+          css={{ alignSelf: 'center' }}
+          sz="md"
           labelWidth={FORM_LABEL_WIDTH}
-          checked={info.remote}
           readOnly
-          helpText="Only looking for remote positions."
+          checked={info.remote}
+          helpText={errors.remote ?? 'Only looking for remote positions.'}
+          helpIntent={errors.remote ? 'error' : 'none'}
         />
       </Tooltip>
       <Button sz="lg" type="submit">
@@ -162,4 +153,5 @@ const PdfGuard = () => {
     </FormContainer>
   );
 };
+
 export default PdfGuard;
