@@ -16,29 +16,52 @@ type SupportedElement = HTMLElement;
 
 const SIDE_OFFSET = 5;
 
-const TOOLTIP_POSITIONS = (refRect: SupportedElement, contentRect: SupportedElement) => ({
+const TOOLTIP_POSITIONS = (refEl: SupportedElement, contentEl: SupportedElement) => ({
   top: {
-    top: refRect.offsetTop - contentRect.offsetHeight - SIDE_OFFSET,
-    left: refRect.offsetLeft - contentRect.offsetWidth / 2,
+    top: refEl.offsetTop - contentEl.offsetHeight - SIDE_OFFSET,
+    left: refEl.offsetLeft - contentEl.offsetWidth / 2,
   },
   right: {
-    top: refRect.offsetTop + (refRect.offsetHeight - contentRect.offsetHeight) / 2,
-    left: refRect.offsetLeft + refRect.offsetWidth + SIDE_OFFSET,
+    top: refEl.offsetTop + (refEl.offsetHeight - contentEl.offsetHeight) / 2,
+    left: refEl.offsetLeft + refEl.offsetWidth + SIDE_OFFSET,
   },
   bottom: {
-    top: refRect.offsetTop + contentRect.offsetHeight / 2,
-    left: refRect.offsetLeft - contentRect.offsetWidth / 2,
+    top: refEl.offsetTop + contentEl.offsetHeight / 2,
+    left: refEl.offsetLeft - contentEl.offsetWidth / 2,
   },
   left: {
-    top: refRect.offsetTop + (refRect.offsetHeight - contentRect.offsetHeight) / 2,
-    left: refRect.offsetLeft - contentRect.offsetWidth - SIDE_OFFSET,
+    top: refEl.offsetTop + (refEl.offsetHeight - contentEl.offsetHeight) / 2,
+    left: refEl.offsetLeft - contentEl.offsetWidth - SIDE_OFFSET,
   },
 });
+
+type SUPPORTED_POSITION = 'top' | 'right' | 'bottom' | 'left';
+
+const handleOpen = (
+  targetEl: SupportedElement,
+  contentEl: SupportedElement,
+  setStyles: any,
+  position: SUPPORTED_POSITION
+) => {
+  contentEl.setAttribute('data-visible', 'true');
+  window.requestAnimationFrame(() => {
+    if (!contentEl?.offsetHeight) {
+      return;
+    }
+    setStyles(TOOLTIP_POSITIONS(targetEl, contentEl)[position]);
+  });
+};
+
+const handleClose = (contentEl?: SupportedElement | null) => {
+  if (contentEl) {
+    contentEl.removeAttribute('data-visible');
+  }
+};
 
 type TooltipProps = PropsWithChildren<{
   content: string;
   targetElement?: SupportedElement;
-  position?: 'top' | 'right' | 'bottom' | 'left';
+  position?: SUPPORTED_POSITION;
 }>;
 
 export const Tooltip = ({ children, content, targetElement, position = 'top' }: TooltipProps) => {
@@ -79,25 +102,31 @@ export const Tooltip = ({ children, content, targetElement, position = 'top' }: 
       ? cloneElement(child, {
           onMouseOver: (e: MouseEvent<SupportedElement>) => {
             child.props.onMouseOver?.(e);
-            if (contentRef.current) {
-              contentRef.current.setAttribute('data-visible', 'true');
-              window.requestAnimationFrame(() => {
-                if (!contentRef.current?.offsetHeight) {
-                  return;
-                }
-                if (!(e.target instanceof HTMLElement)) {
-                  // runtime safety for TS safety; e.target is an HTML EventTarget
-                  return;
-                }
-                setContentPositions(TOOLTIP_POSITIONS(e.target, contentRef.current)[position]);
-              });
+
+            if (!contentRef.current || !(e.target instanceof HTMLElement)) {
+              return;
             }
+
+            handleOpen(e.target, contentRef.current, setContentPositions, position);
           },
           onMouseOut: (e: MouseEvent<SupportedElement>) => {
             child.props.onMouseOut?.(e);
-            if (contentRef.current) {
-              contentRef.current.removeAttribute('data-visible');
+
+            handleClose(contentRef.current);
+          },
+          onFocus: (e: MouseEvent<SupportedElement>) => {
+            child.props.onFocus?.(e);
+
+            if (!contentRef.current || !(e.target instanceof HTMLElement)) {
+              return;
             }
+
+            handleOpen(e.target, contentRef.current, setContentPositions, position);
+          },
+          onBlur: (e: MouseEvent<SupportedElement>) => {
+            child.props.onBlur?.(e);
+
+            handleClose(contentRef.current);
           },
         })
       : child;

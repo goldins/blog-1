@@ -54,11 +54,11 @@ export const TextField = ({
         />
         {helpText ? (
           <P
-            css={{
+            css={({ colors }) => ({
               gridArea: 'helpText',
               marginBottom: 0,
-              ...(helpIntent === 'error' ? { color: 'red' } : {}),
-            }}
+              ...(helpIntent === 'error' ? { color: colors.error } : {}),
+            })}
             sz={lowerSz}
           >
             {helpText}

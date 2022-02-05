@@ -11,7 +11,7 @@ interface Props extends InputHTMLAttributes<HTMLDivElement>, SizeProps {
   gridTemplateAreas?: Property.GridTemplateAreas;
   gridTemplateColumns?: Property.GridTemplateColumns;
   gridTemplateRows?: Property.GridTemplateRows;
-  justifyContents?: Property.JustifyItems;
+  justifyContent?: Property.JustifyContent;
 }
 
 export const Grid = styled('div')(
@@ -22,7 +22,7 @@ export const Grid = styled('div')(
     gridTemplateAreas = 'initial',
     gridTemplateColumns = 'initial',
     gridTemplateRows = 'initial',
-    justifyContents = 'initial',
+    justifyContent = 'initial',
   }: { theme?: Theme } & Props) => ({
     alignItems,
     display: 'grid',
@@ -31,6 +31,6 @@ export const Grid = styled('div')(
     gridTemplateAreas,
     gridTemplateColumns,
     gridTemplateRows,
-    justifyContents,
+    justifyContent,
   })
 );
