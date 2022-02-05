@@ -3,11 +3,13 @@ import Link from 'next/link';
 import { VerticalContainer } from '../../components/Container';
 import { A, H1, P } from '../../components/General';
 import { useRouter } from 'next/router';
+import { object } from 'prop-types';
 
 const Projects = () => {
   const { query } = useRouter();
 
-  const { beta = null } = query;
+  console.log(query);
+  const showBeta = Object.prototype.hasOwnProperty.call(query, 'beta');
 
   return (
     <VerticalContainer>
@@ -23,7 +25,7 @@ const Projects = () => {
         </Link>
       </P>
       <P>
-        {beta !== null ? (
+        {showBeta ? (
           <Link href="/projects/pdf-guard" passHref>
             <A>PDF Guard</A>
           </Link>
