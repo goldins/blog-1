@@ -1,9 +1,9 @@
 import { Theme } from '@emotion/react';
 import { CSSObject } from '@emotion/serialize';
 
-export default (theme: Theme): CSSObject => ({
+const theme = (theme: Theme): CSSObject => ({
   '*': {
-    borderSizing: 'border-box'
+    boxSizing: 'border-box'
   },
   html: {
     fontSize: `${theme.dimensions.fontSize.regular}px`,
@@ -126,6 +126,4 @@ export default (theme: Theme): CSSObject => ({
   }
 });
 
-/*`
-
-`;*/
+export default theme;

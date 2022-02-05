@@ -1,4 +1,4 @@
-import React from 'react';
+import { DragEvent, Dispatch, SetStateAction, useState } from 'react';
 import { noop } from 'lodash';
 import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
@@ -8,7 +8,7 @@ import { Button, FormContainer, TextField } from '../General';
 const StyledInput = styled(TextField)(({ theme }) => ({
   color: 'transparent',
   textShadow: `0 0 0 ${theme.colors.gray.dark}`,
-  cursor: 'not-allowed'
+  cursor: 'not-allowed',
 }));
 
 type FormValues = {
@@ -20,7 +20,7 @@ type OnDrop = (
   text: string,
   valueKey: keyof FormValues,
   values: FormValues,
-  setValues: React.Dispatch<React.SetStateAction<FormValues>>
+  setValues: Dispatch<SetStateAction<FormValues>>
 ) => void;
 
 const updateForm: OnDrop = (text, valueKey, values, setValues) => {
@@ -43,39 +43,39 @@ export const Form = () => {
     const message = Object.keys(values).reduce(
       (acc, currentKey) => [
         ...acc,
-        `\n${currentKey}: ${values[currentKey as keyof FormValues].toString()}`
+        `\n${currentKey}: ${values[currentKey as keyof FormValues].toString()}`,
       ],
       [] as string[]
     );
     alert(message.join(''));
   };
 
-  const [values, setValues] = React.useState<FormValues>({ value1: '', value2: '' });
+  const [values, setValues] = useState<FormValues>({ value1: '', value2: '' });
 
-  const setHighlight = (e: React.DragEvent<HTMLElement>) => {
+  const setHighlight = (e: DragEvent<HTMLElement>) => {
     e.currentTarget.style.borderColor = theme.colors.brand;
 
     e.preventDefault();
     e.stopPropagation();
   };
 
-  const clearHighlight = (e: React.DragEvent<HTMLElement>) => {
+  const clearHighlight = (e: DragEvent<HTMLElement>) => {
     e.currentTarget.style.borderColor = '';
 
     e.preventDefault();
     e.stopPropagation();
   };
 
-  const onDragOver = (e: React.DragEvent<HTMLElement>) => {
+  const onDragOver = (e: DragEvent<HTMLElement>) => {
     setHighlight(e);
     e.preventDefault();
   };
 
-  const onDragLeave = (e: React.DragEvent<HTMLElement>) => {
+  const onDragLeave = (e: DragEvent<HTMLElement>) => {
     clearHighlight(e);
   };
 
-  const onDrop = (e: React.DragEvent<HTMLInputElement>, valueKey: keyof FormValues) => {
+  const onDrop = (e: DragEvent<HTMLInputElement>, valueKey: keyof FormValues) => {
     const { dataTransfer } = e;
     const text = dataTransfer.getData('text');
 

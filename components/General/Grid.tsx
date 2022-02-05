@@ -1,27 +1,36 @@
 import { InputHTMLAttributes } from 'react';
+import type { Property } from 'csstype';
+import { Theme } from '@emotion/react';
 import styled from '@emotion/styled';
 import { SizeProps } from '../../styles/defaultTheme';
-import { Theme } from '@emotion/react';
 
 interface Props extends InputHTMLAttributes<HTMLDivElement>, SizeProps {
-  container?: boolean;
-  item?: boolean;
+  alignItems?: Property.AlignItems;
+  gap?: Property.Gap;
+  gridArea?: Property.GridArea;
+  gridTemplateAreas?: Property.GridTemplateAreas;
+  gridTemplateColumns?: Property.GridTemplateColumns;
+  gridTemplateRows?: Property.GridTemplateRows;
+  justifyContents?: Property.JustifyItems;
 }
 
 export const Grid = styled('div')(
-  ({ theme, sz = 'md', container = false, item = false }: { theme: Theme } & Props) => ({
-    display: container ? 'flex' : 'initial',
-    flex: item ? '1 1' : 'initial',
-    ...(sz === 'sm'
-      ? {
-          padding: item ? theme.dimensions.containerPadding * 2 : 0
-        }
-      : sz === 'lg'
-      ? {
-          padding: item ? theme.dimensions.containerPadding * 4 : 0
-        }
-      : {
-          padding: item ? theme.dimensions.containerPadding * 6 : 0
-        })
+  ({
+    alignItems = 'initial',
+    gap = 'initial',
+    gridArea = 'initial',
+    gridTemplateAreas = 'initial',
+    gridTemplateColumns = 'initial',
+    gridTemplateRows = 'initial',
+    justifyContents = 'initial',
+  }: { theme?: Theme } & Props) => ({
+    alignItems,
+    display: 'grid',
+    gap,
+    gridArea,
+    gridTemplateAreas,
+    gridTemplateColumns,
+    gridTemplateRows,
+    justifyContents,
   })
 );

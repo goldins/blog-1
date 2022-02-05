@@ -16,7 +16,7 @@ interface AppProps {
   pageProps: Record<string, any>;
 }
 
-export default ({ Component, pageProps }: AppProps) => {
+const AppWrapper = ({ Component, pageProps }: AppProps) => {
   React.useEffect(() => {
     polyfill({ dragImageTranslateOverride: scrollBehaviourDragImageTranslateOverride });
   }, []);
@@ -31,3 +31,5 @@ export default ({ Component, pageProps }: AppProps) => {
     </Container>
   );
 };
+
+export default AppWrapper;

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { PropsWithChildren } from 'react';
 import styled from '@emotion/styled';
 
 const Section = styled.section(() => ({
@@ -9,7 +9,7 @@ const Section = styled.section(() => ({
   alignItems: 'center'
 }));
 
-export const Container = (props: React.PropsWithChildren<Record<string, unknown>>) => {
+export const Container = (props: PropsWithChildren<Record<string, unknown>>) => {
   return (
     <Section>
       <main>{props.children}</main>

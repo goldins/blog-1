@@ -207,7 +207,7 @@ const UploadElement = ({ src, uniqueId, onSelect, ...rest }: UploadElementProps)
   );
 };
 
-export default () => {
+const DoItGenerator = () => {
   const canvasEl = React.useRef<HTMLCanvasElement>(null);
   const downloadEl = React.useRef<HTMLAnchorElement>(null);
   const [scaleFactor, setScaleFactor] = React.useState(1);
@@ -398,3 +398,5 @@ export default () => {
     </>
   );
 };
+
+export default DoItGenerator;
