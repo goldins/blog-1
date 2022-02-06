@@ -1,4 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { generateSecret } from '../2fa/lib';
+import { generateToken } from '../../../lib/2fa';
+import { TIME_STEP } from '../../../lib/2fa/consts';
 
 class RequestData {
   public static readonly REQUIRED: ('name' | 'company' | 'salaryMin')[] = [
@@ -55,8 +58,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const errors = null; //  data.validate();
 
   if (!errors) {
+    // todo: move secret to database!
+    const secret = generateSecret();
+    const token = generateToken(secret, Date.now() / TIME_STEP / 1000);
     res.statusCode = 200;
-    res.json({ token: 'token' });
+    res.json({ secret, token });
   } else {
     res.statusCode = 400;
     res.json(errors);

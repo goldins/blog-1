@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { verify } from '../2fa/lib/index';
 import pdfFile from './PDF14.pdf';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -8,10 +9,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
 
-  // expect req.body to contain token
-  const { token = '' } = JSON.parse(req.body);
+  // todo: fetch token from db!
+  const { token = '', secret = '' } = JSON.parse(req.body);
 
   if (!token) {
+    res.statusCode = 401;
+    res.json({ error: 'Unauthorized.' });
+  }
+
+  const verified = await verify(secret, token, 5, 1);
+
+  if (!verified) {
     res.statusCode = 401;
     res.json({ error: 'Unauthorized.' });
   }
