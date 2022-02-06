@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { FormEventHandler, useState } from 'react';
-import { Button, FormContainer, TextField } from '../../../components/General';
-import { CheckboxField } from '../../../components/General/Inputs/CheckboxField';
-import { Tooltip } from '../../../components/General/Tooltip';
+import { encode } from 'iconv-lite';
+import { Button, FormContainer, TextField, CheckboxField, Tooltip } from '../../../components';
 
 const FORM_LABEL_WIDTH = '25vw';
 const FORM_INPUT_WIDTH = '25vw';
@@ -59,19 +58,13 @@ const PdfGuard = () => {
         body: JSON.stringify({ token }),
       });
 
-      const pdfTxt = await resp.text();
+      const pdfB64 = await resp.text();
+      const pdfUtf8 = window.atob(pdfB64);
+      const pdfBuffer = encode(pdfUtf8, 'ISO-8859-1');
 
-      const cleaned = window.atob(
-        pdfTxt.slice('data:application/pdf;charset=utf-8;base64,'.length, Infinity)
-      );
-
-      const blob = new Blob([cleaned], { type: 'application/pdf' });
+      const blob = new Blob([pdfBuffer], { type: 'application/pdf' });
 
       setPdfUrl(window.URL.createObjectURL(blob));
-      // const tab = window.open();
-      // if (tab) {
-      //  tab.location.href = fileURL;
-      // }
     }
   };
 
