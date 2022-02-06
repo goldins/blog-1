@@ -127,7 +127,7 @@ const PdfGuard = () => {
         labelWidth={FORM_LABEL_WIDTH}
         inputWidth={FORM_INPUT_WIDTH}
         labelEllipsis
-        helpText={errors.salaryMin ?? 'Approximate start of range (USD)'}
+        helpText={errors.salaryMin ?? 'Approximate start of pay range ($ USD)'}
         helpIntent={errors.salaryMin ? 'error' : 'none'}
         value={info.salaryMin}
         onChange={(e) => patchInfo('salaryMin', e.target.value)}
