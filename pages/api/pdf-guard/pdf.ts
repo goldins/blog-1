@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import pdfFile from '../../../assets/pdf-guard/PDF14.pdf';
+import pdfFile from './PDF14.pdf';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
