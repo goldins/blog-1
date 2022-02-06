@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { FormEventHandler, useState } from 'react';
 import { encode } from 'iconv-lite';
-import { Button, FormContainer, TextField, CheckboxField, Tooltip } from '../../../components';
+import { Button, FormContainer, TextField, CheckboxField, Tooltip, P } from '../../../components';
 
 const FORM_LABEL_WIDTH = '25vw';
 const FORM_INPUT_WIDTH = '25vw';
@@ -140,6 +140,9 @@ const PdfGuard = () => {
           helpIntent={errors.remote ? 'error' : 'none'}
         />
       </Tooltip>
+      <P sz="sm" css={({ colors }) => ({ color: colors.gray.copy, fontStyle: 'italic' })}>
+        This information is for my own use and will not be shared or sold.
+      </P>
       <Button sz="lg" type="submit">
         Submit
       </Button>
