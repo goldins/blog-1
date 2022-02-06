@@ -12,14 +12,13 @@ export const StyledTextInput = styled('input')(
     letterSpacing: 1,
     borderStyle: 'solid',
     borderWidth: 2,
-    borderColor: colors.brand,
     '&:focus': {
       outline: 'none',
       borderColor: colors.accent,
     },
     padding: `0 .25em`,
   }),
-  ({ theme, sz = 'md', disabled = false }: { theme: Theme } & Props) => ({
+  ({ theme, sz = 'md' }: { theme: Theme } & Props) => ({
     ...(sz === 'sm'
       ? {
           fontSize: theme.dimensions.fontSize.small,
@@ -38,6 +37,11 @@ export const StyledTextInput = styled('input')(
           borderRadius: theme.dimensions.borderRadii.regular,
         }),
     borderColor: theme.colors.ui.bright,
-    cursor: disabled ? 'not-allowed' : 'initial',
+    '&[readonly]:focus': {
+      borderColor: theme.colors.ui.bright,
+    },
+    ':not(:disabled)': {
+      cursor: 'initial',
+    },
   })
 );
