@@ -1,7 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { COLLECTION } from './consts';
 import { generateSecret } from '../2fa/lib';
 import { generateToken } from '../../../lib/2fa';
 import { TIME_STEP } from '../../../lib/2fa/consts';
+import { client, q } from '../../../lib/db/client';
 
 class RequestData {
   public static readonly REQUIRED: ('name' | 'company' | 'salaryMin')[] = [
@@ -41,6 +43,17 @@ class RequestData {
 
     return Object.keys(errors).length ? errors : null;
   };
+
+  public json = () => ({
+    name: this.name,
+    agency: this.agency,
+    company: this.company,
+    role: this.role,
+    salaryMin: this.salaryMin,
+    equity: this.equity,
+    bonus: this.bonus,
+    remote: this.remote,
+  });
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -52,17 +65,26 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { name, agency, company, role, salaryMin, equity, bonus, remote } = JSON.parse(req.body);
 
   const formattedSalary = Number(salaryMin.replace(/[,.]/g, '').replace('k', '000'));
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const data = new RequestData(name, agency, company, role, formattedSalary, equity, bonus, remote);
 
-  const errors = null; //  data.validate();
+  const errors = data.validate();
 
   if (!errors) {
-    // todo: move secret to database!
     const secret = generateSecret();
     const token = generateToken(secret, Date.now() / TIME_STEP / 1000);
+
+    const resp = await client.query(
+      q.Create(q.Collection(COLLECTION), { data: { ...data.json(), secret } })
+    );
+
+    // todo: find a better way to get the ID.
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const refId = resp?.ref?.id;
+
     res.statusCode = 200;
-    res.json({ secret, token });
+    res.json({ token, id: refId });
   } else {
     res.statusCode = 400;
     res.json(errors);

@@ -51,11 +51,11 @@ const PdfGuard = () => {
     if (submitResp.status === 400) {
       setErrors(await submitResp.json());
     } else {
-      const { token = '', secret = '' } = await submitResp.json();
+      const { token = '', id = '' } = await submitResp.json();
       const resp = await fetch('/api/pdf-guard/pdf', {
         method: 'POST',
         credentials: 'include',
-        body: JSON.stringify({ token, secret }),
+        body: JSON.stringify({ token, id }),
       });
 
       const pdfB64 = await resp.text();
