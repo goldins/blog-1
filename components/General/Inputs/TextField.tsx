@@ -10,9 +10,10 @@ import { Property } from 'csstype';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement>, SizeProps {
   label?: ReactNode;
+  labelEllipsis?: boolean;
+  labelWidth?: Property.Width;
   helpText?: ReactNode;
   helpIntent?: 'none' | 'error';
-  labelWidth?: Property.Width;
   inputWidth?: Property.Width;
 }
 
@@ -21,6 +22,7 @@ export const TextField = ({
   sz,
   helpText,
   label,
+  labelEllipsis = false,
   labelWidth = 'auto',
   inputWidth = 'auto',
   helpIntent = 'none',
@@ -42,7 +44,20 @@ export const TextField = ({
         }`}
       >
         {label ? (
-          <StyledLabel css={{ width: labelWidth, gridArea: 'label' }} sz={sz}>
+          <StyledLabel
+            css={{
+              width: labelWidth,
+              gridArea: 'label',
+              ...(labelEllipsis
+                ? {
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }
+                : {}),
+            }}
+            sz={sz}
+          >
             {label}
           </StyledLabel>
         ) : null}

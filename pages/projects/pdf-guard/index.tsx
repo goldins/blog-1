@@ -3,8 +3,8 @@ import { FormEventHandler, useState } from 'react';
 import { encode } from 'iconv-lite';
 import { Button, FormContainer, TextField, CheckboxField, Tooltip, P } from '../../../components';
 
-const FORM_LABEL_WIDTH = '25vw';
-const FORM_INPUT_WIDTH = '25vw';
+const FORM_LABEL_WIDTH = '100%';
+const FORM_INPUT_WIDTH = '100%';
 
 interface FormInfo {
   name: string;
@@ -78,6 +78,7 @@ const PdfGuard = () => {
         sz="md"
         labelWidth={FORM_LABEL_WIDTH}
         inputWidth={FORM_INPUT_WIDTH}
+        labelEllipsis
         helpText={errors.name ?? 'Your name.'}
         helpIntent={errors.name ? 'error' : 'none'}
         value={info.name}
@@ -89,6 +90,7 @@ const PdfGuard = () => {
         sz="md"
         labelWidth={FORM_LABEL_WIDTH}
         inputWidth={FORM_INPUT_WIDTH}
+        labelEllipsis
         helpText={errors.agency ?? 'Talent sourcing partner, if external.'}
         helpIntent={errors.agency ? 'error' : 'none'}
         value={info.agency}
@@ -100,6 +102,7 @@ const PdfGuard = () => {
         sz="md"
         labelWidth={FORM_LABEL_WIDTH}
         inputWidth={FORM_INPUT_WIDTH}
+        labelEllipsis
         helpText={errors.company ?? 'Company looking to fill this role.'}
         helpIntent={errors.company ? 'error' : 'none'}
         value={info.company}
@@ -111,6 +114,7 @@ const PdfGuard = () => {
         sz="md"
         labelWidth={FORM_LABEL_WIDTH}
         inputWidth={FORM_INPUT_WIDTH}
+        labelEllipsis
         helpText={errors.role ?? 'Open position or positions.'}
         helpIntent={errors.role ? 'error' : 'none'}
         value={info.role}
@@ -122,6 +126,7 @@ const PdfGuard = () => {
         sz="md"
         labelWidth={FORM_LABEL_WIDTH}
         inputWidth={FORM_INPUT_WIDTH}
+        labelEllipsis
         helpText={errors.salaryMin ?? 'Approximate start of range (USD)'}
         helpIntent={errors.salaryMin ? 'error' : 'none'}
         value={info.salaryMin}
@@ -144,7 +149,7 @@ const PdfGuard = () => {
         This information is for my own use and will not be shared or sold.
       </P>
       <Button sz="lg" type="submit">
-        Submit
+        View document
       </Button>
     </FormContainer>
   );
