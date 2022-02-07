@@ -6,14 +6,16 @@ import { TIME_STEP } from '../../../lib/2fa/consts';
 import { client, q } from '../../../lib/db/client';
 
 class RequestData {
-  public static readonly REQUIRED: ('name' | 'company' | 'salaryMin')[] = [
+  public static readonly REQUIRED: ('name' | 'email' | 'company' | 'salaryMin')[] = [
     'name',
+    'email',
     'company',
     'salaryMin',
   ];
 
   public constructor(
     private readonly name: string,
+    private readonly email: string,
     private readonly agency: string,
     private readonly company: string,
     private readonly role: string,
@@ -34,7 +36,8 @@ class RequestData {
     if (isNaN(this.salaryMin)) {
       errors.salaryMin = 'Malformed.';
     } else if (this.salaryMin < 50_000) {
-      errors.salaryMin = 'Too low.';
+      errors.salaryMin =
+        'Below my range, but if you think I may still be interested, please email me.';
     }
 
     if (!this.remote) {
@@ -46,6 +49,7 @@ class RequestData {
 
   public json = () => ({
     name: this.name,
+    email: this.email,
     agency: this.agency,
     company: this.company,
     role: this.role,
@@ -62,11 +66,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.json({ error: 'Invalid endpoint.' });
     return;
   }
-  const { name, agency, company, role, salaryMin, equity, bonus, remote } = JSON.parse(req.body);
+  const { name, email, agency, company, role, salaryMin, equity, bonus, remote } = JSON.parse(
+    req.body
+  );
 
   const formattedSalary = Number(salaryMin.replace(/[,.]/g, '').replace('k', '000'));
 
-  const data = new RequestData(name, agency, company, role, formattedSalary, equity, bonus, remote);
+  const data = new RequestData(
+    name,
+    email,
+    agency,
+    company,
+    role,
+    formattedSalary,
+    equity,
+    bonus,
+    remote
+  );
 
   const errors = data.validate();
 

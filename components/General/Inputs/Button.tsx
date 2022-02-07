@@ -25,6 +25,7 @@ export const Button = styled('button')(
           fontSize: theme.dimensions.fontSize.large,
           lineHeight: theme.dimensions.lineHeight.regular,
           borderRadius: theme.dimensions.borderRadii.large,
+          padding: '4px 12px',
         }
       : {
           fontSize: theme.dimensions.fontSize.regular,
@@ -34,9 +35,11 @@ export const Button = styled('button')(
     '&:disabled': {
       cursor: 'not-allowed',
     },
-    backgroundColor: lighten(0.15, theme.colors.success),
+    backgroundColor: lighten(0.15, theme.colors.brand),
+    color: theme.colors.gray.copy,
     '&:hover:not(:disabled)': {
-      backgroundColor: lighten(0.2, theme.colors.success),
+      color: theme.colors.gray.calm,
+      backgroundColor: lighten(0.2, theme.colors.brand),
     },
     '&:focus-visible': {
       outlineColor: theme.colors.black,
@@ -44,7 +47,8 @@ export const Button = styled('button')(
       outlineStyle: 'solid',
     },
     '&:active:not(:disabled)': {
-      backgroundColor: lighten(0.3, theme.colors.success),
+      color: lighten(0.2, theme.colors.gray.calm),
+      backgroundColor: lighten(0.3, theme.colors.brand),
     },
   })
 );
