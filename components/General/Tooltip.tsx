@@ -16,24 +16,28 @@ type SupportedElement = HTMLElement;
 
 const SIDE_OFFSET = 5;
 
-const TOOLTIP_POSITIONS = (refEl: SupportedElement, contentEl: SupportedElement) => ({
-  top: {
-    top: refEl.offsetTop - contentEl.offsetHeight - SIDE_OFFSET,
-    left: refEl.offsetLeft - contentEl.offsetWidth / 2,
-  },
-  right: {
-    top: refEl.offsetTop + (refEl.offsetHeight - contentEl.offsetHeight) / 2,
-    left: refEl.offsetLeft + refEl.offsetWidth + SIDE_OFFSET,
-  },
-  bottom: {
-    top: refEl.offsetTop + contentEl.offsetHeight / 2,
-    left: refEl.offsetLeft - contentEl.offsetWidth / 2,
-  },
-  left: {
-    top: refEl.offsetTop + (refEl.offsetHeight - contentEl.offsetHeight) / 2,
-    left: refEl.offsetLeft - contentEl.offsetWidth - SIDE_OFFSET,
-  },
-});
+const TOOLTIP_POSITIONS = (refEl: SupportedElement, contentEl: SupportedElement) => {
+  const refRect = refEl.getBoundingClientRect();
+  const contentRect = contentEl.getBoundingClientRect();
+  return {
+    top: {
+      top: refRect.top - contentRect.height + window.scrollY - SIDE_OFFSET,
+      left: refRect.left + window.scrollX - (contentRect.width - refRect.width) / 2,
+    },
+    right: {
+      top: refRect.top + window.scrollY - (contentRect.height - refRect.height) / 2,
+      left: refRect.right + window.scrollX + SIDE_OFFSET,
+    },
+    bottom: {
+      top: refRect.bottom + window.scrollY + SIDE_OFFSET,
+      left: refRect.left + window.scrollX - (contentRect.width - refRect.width) / 2,
+    },
+    left: {
+      top: refRect.top + window.scrollY - (contentRect.height - refRect.height) / 2,
+      right: refRect.right + window.scrollX - SIDE_OFFSET,
+    },
+  };
+};
 
 type SUPPORTED_POSITION = 'top' | 'right' | 'bottom' | 'left';
 
