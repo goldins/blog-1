@@ -5,7 +5,7 @@ import { A, H1, P } from '../../../components/General';
 
 const BadUx = () => (
   <VerticalContainer>
-    <H1>Projects</H1>
+    <H1>Bad UX Series</H1>
     <P>
       <Link href="/projects/bad-ux/bad-keyboard" passHref>
         <A>Drag and Drop Keyboard</A>
