@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Link from 'next/link';
-import { VerticalContainer } from '../../../components/Container';
-import { A, H1, P } from '../../../components/General';
+import { A, Beta, H1, P, VerticalContainer } from '../../../components';
 
 const BadUx = () => (
   <VerticalContainer>
@@ -16,6 +15,13 @@ const BadUx = () => (
         <A>2🤬A</A>
       </Link>
     </P>
+    <Beta>
+      <P>
+        <Link href="/projects/bad-ux/tbd" passHref>
+          <A>tbd</A>
+        </Link>
+      </P>
+    </Beta>
   </VerticalContainer>
 );
 
