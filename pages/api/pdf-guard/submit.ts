@@ -20,6 +20,8 @@ class RequestData {
     private readonly company: string,
     private readonly role: string,
     private readonly salaryMin: number,
+    private readonly salaryMax: number,
+    private readonly other: string,
     private readonly equity: string,
     private readonly bonus: string,
     private readonly remote: boolean
@@ -40,6 +42,12 @@ class RequestData {
         'Below my range, but if you think I may still be interested, please email me.';
     }
 
+    if (isNaN(this.salaryMax)) {
+      errors.salaryMax = 'Malformed.';
+    } else if (this.salaryMax > 50_000_000) {
+      errors.salaryMax = 'Yeah, okay.';
+    }
+
     if (!this.remote) {
       errors.remote = 'Nice try.';
     }
@@ -54,7 +62,9 @@ class RequestData {
     company: this.company,
     role: this.role,
     salaryMin: this.salaryMin,
+    salaryMax: this.salaryMax,
     equity: this.equity,
+    other: this.other,
     bonus: this.bonus,
     remote: this.remote,
   });
@@ -66,11 +76,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.json({ error: 'Invalid endpoint.' });
     return;
   }
-  const { name, email, agency, company, role, salaryMin, equity, bonus, remote } = JSON.parse(
-    req.body
-  );
+  const { name, email, agency, company, role, salaryMin, salaryMax, other, equity, bonus, remote } =
+    JSON.parse(req.body);
 
-  const formattedSalary = Number(salaryMin.replace(/[,.]/g, '').replace('k', '000'));
+  const formattedMin = Number(salaryMin.replace(/[,.]/g, '').replace('k', '000'));
+  const formattedMax = Number(salaryMax.replace(/[,.]/g, '').replace('k', '000'));
 
   const data = new RequestData(
     name,
@@ -78,7 +88,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     agency,
     company,
     role,
-    formattedSalary,
+    formattedMin,
+    formattedMax,
+    other,
     equity,
     bonus,
     remote

@@ -21,7 +21,8 @@ interface FormInfo {
   company: string;
   role: string;
   salaryMin: string;
-  equity: string;
+  salaryMax: string;
+  other: boolean;
   remote: true;
 }
 
@@ -33,12 +34,12 @@ const PdfGuard = () => {
     company: '',
     role: '',
     salaryMin: '',
-    equity: '',
+    salaryMax: '',
+    other: false,
     remote: true,
   });
 
   const [errors, setErrors] = useState<Partial<Record<keyof FormInfo, string>>>({});
-  const [pdfUrl, setPdfUrl] = useState('');
 
   const patchInfo = <T extends keyof FormInfo>(key: T, value: unknown) => {
     setErrors((currentErrors) => ({
@@ -74,13 +75,11 @@ const PdfGuard = () => {
 
       const blob = new Blob([pdfBuffer], { type: 'application/pdf' });
 
-      setPdfUrl(window.URL.createObjectURL(blob));
+      window.open(window.URL.createObjectURL(blob), '_blank');
     }
   };
 
-  return pdfUrl ? (
-    <iframe css={{ width: '100vw', height: '100vh' }} src={pdfUrl} />
-  ) : (
+  return (
     <>
       <H2>Please complete this form to continue.</H2>
       <FormContainer onSubmit={handleSubmit}>
@@ -136,7 +135,7 @@ const PdfGuard = () => {
         />
         <TextField
           name="salaryMin"
-          label="Salary (minimum)"
+          label="Salary (min)"
           sz="md"
           labelWidth={FORM_LABEL_WIDTH}
           inputWidth={FORM_INPUT_WIDTH}
@@ -145,6 +144,33 @@ const PdfGuard = () => {
           helpIntent={errors.salaryMin ? 'error' : 'none'}
           value={info.salaryMin}
           onChange={(e) => patchInfo('salaryMin', e.target.value)}
+        />
+        <TextField
+          name="salaryMax"
+          label="Salary (max)"
+          sz="md"
+          labelWidth={FORM_LABEL_WIDTH}
+          inputWidth={FORM_INPUT_WIDTH}
+          labelEllipsis
+          helpText={errors.salaryMax ?? 'Approximate end of pay range ($ USD)'}
+          helpIntent={errors.salaryMax ? 'error' : 'none'}
+          value={info.salaryMax}
+          onChange={(e) => patchInfo('salaryMax', e.target.value)}
+        />
+        <TextField
+          textArea
+          name="other"
+          label="Other?"
+          css={{ resize: 'vertical' }}
+          sz="md"
+          labelWidth={FORM_LABEL_WIDTH}
+          inputWidth={FORM_INPUT_WIDTH}
+          helpText={
+            errors.other ??
+            "Other compensation like equity or bonuses, or anything else you'd like to add."
+          }
+          helpIntent={errors.other ? 'error' : 'none'}
+          onChange={(e) => patchInfo('other', e.target.value)}
         />
         <Tooltip content="Remote-only GMT-5 ± 1" position="right">
           <CheckboxField
@@ -155,12 +181,12 @@ const PdfGuard = () => {
             labelWidth={FORM_LABEL_WIDTH}
             readOnly
             checked={info.remote}
-            helpText={errors.remote ?? 'Only looking for remote positions.'}
+            helpText={errors.remote ?? "I'm only looking for remote positions."}
             helpIntent={errors.remote ? 'error' : 'none'}
           />
         </Tooltip>
         <P sz="sm" css={({ colors }) => ({ color: colors.gray.copy, fontStyle: 'italic' })}>
-          This information is for my own use and will not be shared or sold.
+          This information is for my own personal use and will not be shared or sold.
         </P>
         <P sz="sm">
           Please email me at <strong>simongold.in at gmail</strong> with any questions.
