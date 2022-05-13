@@ -75,7 +75,10 @@ export const Form = () => {
     clearHighlight(e);
   };
 
-  const onDrop = (e: DragEvent<HTMLInputElement>, valueKey: keyof FormValues) => {
+  const onDrop = (
+    e: DragEvent<HTMLInputElement | HTMLTextAreaElement>,
+    valueKey: keyof FormValues
+  ) => {
     const { dataTransfer } = e;
     const text = dataTransfer.getData('text');
 
