@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import * as React from 'react';
 import Link from 'next/link';
 import { A, H1, P, Beta, VerticalContainer } from '../../components';

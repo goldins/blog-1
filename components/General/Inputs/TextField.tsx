@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import type { InputHTMLAttributes, ReactNode } from 'react';
 import { StyledLabel } from '../Label';
 import { StyledTextAreaInput, StyledTextInput } from './TextInput';

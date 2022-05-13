@@ -7,7 +7,7 @@ exports[`Home page matches snapshot 1`] = `
   >
     <main>
       <h1
-        class="css-pavrw7"
+        class="css-1aabt2e"
       >
         Simon.Goldin
       </h1>
@@ -16,7 +16,8 @@ exports[`Home page matches snapshot 1`] = `
       class="css-1pjcvux"
     >
       <a
-        class="css-1i55uvb"
+        class="css-e97muk"
+        href="/blog"
       >
         Blog
       </a>
@@ -25,7 +26,8 @@ exports[`Home page matches snapshot 1`] = `
       class="css-1pjcvux"
     >
       <a
-        class="css-1i55uvb"
+        class="css-e97muk"
+        href="/projects"
       >
         Projects
       </a>
@@ -33,7 +35,7 @@ exports[`Home page matches snapshot 1`] = `
     <footer
       class="css-ctj0pp"
     >
-      Copyright ©2020 | Simon Goldin
+      Copyright ©2022 | Simon Goldin
     </footer>
   </div>
 </DocumentFragment>
