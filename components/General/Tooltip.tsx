@@ -1,5 +1,3 @@
-/** @jsxImportSource @emotion/react */
-
 import {
   Children,
   cloneElement,
@@ -62,6 +60,7 @@ type TooltipProps = PropsWithChildren<{
   position?: SUPPORTED_POSITION;
 }>;
 
+// Fix me
 export const Tooltip = ({ children, content, position = 'top' }: TooltipProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
 

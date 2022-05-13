@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { FormEventHandler, useState } from 'react';
 import { encode } from 'iconv-lite';
 import {

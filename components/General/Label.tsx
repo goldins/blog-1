@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { LabelHTMLAttributes } from 'react';
 import { Theme } from '@emotion/react';
 import { SizeProps } from '../../styles/defaultTheme';
