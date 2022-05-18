@@ -10,6 +10,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import styled from '@emotion/styled';
 
 type SupportedElement = HTMLElement;
 
@@ -60,6 +61,20 @@ type TooltipProps = PropsWithChildren<{
   position?: SUPPORTED_POSITION;
 }>;
 
+const Div = styled('div')(({ theme: { colors } }) => ({
+  isolation: 'isolate',
+  background: colors.ui.whisper,
+  color: colors.gray.copy,
+  position: 'absolute',
+  borderColor: colors.accent,
+  borderRadius: 8,
+  padding: 4,
+  borderWidth: 1,
+  borderStyle: 'solid',
+  display: 'none',
+  '&[data-visible]': { display: 'block' },
+}));
+
 // Fix me
 export const Tooltip = ({ children, content, position = 'top' }: TooltipProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -67,25 +82,9 @@ export const Tooltip = ({ children, content, position = 'top' }: TooltipProps) =
   const [contentPositions, setContentPositions] = useState<CSSProperties>({});
 
   const ContentElement = (
-    <div
-      ref={contentRef}
-      css={({ colors }) => ({
-        isolation: 'isolate',
-        background: colors.ui.whisper,
-        color: colors.gray.copy,
-        position: 'absolute',
-        borderColor: colors.accent,
-        borderRadius: 8,
-        padding: 4,
-        borderWidth: 1,
-        borderStyle: 'solid',
-        display: 'none',
-        ...contentPositions,
-        '&[data-visible]': { display: 'block' },
-      })}
-    >
+    <Div ref={contentRef} style={contentPositions}>
       {content}
-    </div>
+    </Div>
   );
 
   const clones = Children.map(children, (child) => {

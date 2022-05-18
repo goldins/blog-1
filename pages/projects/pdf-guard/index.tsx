@@ -171,7 +171,7 @@ const PdfGuard = () => {
           helpIntent={errors.other ? 'error' : 'none'}
           onChange={(e) => patchInfo('other', e.target.value)}
         />
-        <Tooltip content="Remote-only GMT-5 ± 1" position="right">
+        <Tooltip content="U.S. East" position="right">
           <CheckboxField
             name="remote"
             label="Remote?"
