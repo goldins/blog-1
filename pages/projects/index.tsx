@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import * as React from 'react';
 import Link from 'next/link';
 import { A, H1, P, Beta, VerticalContainer } from '../../components';
@@ -17,7 +18,7 @@ const Projects = () => (
     </P>
     <Beta>
       <P>
-        <Link href="/projects/pdf-guard" passHref>
+        <Link href="/projects/resume" passHref>
           <A>PDF Guard</A>
         </Link>
       </P>

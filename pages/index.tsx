@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import * as React from 'react';
 import Link from 'next/link';
 import { H1, A, P } from '../components/General';
