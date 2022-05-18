@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import type { ButtonHTMLAttributes } from 'react';
 import { Theme } from '@emotion/react';
 import styled from '@emotion/styled';
@@ -34,6 +35,8 @@ export const Button = styled('button')(
         }),
     '&:disabled': {
       cursor: 'not-allowed',
+      backgroundColor: lighten(0.55, theme.colors.brand),
+      color: theme.colors.gray.calm,
     },
     backgroundColor: lighten(0.15, theme.colors.brand),
     color: theme.colors.gray.copy,

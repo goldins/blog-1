@@ -1,1 +1,1 @@
-export const COLLECTION = 'resume-data';
+export const COLLECTION = 'pdf-guard-data';
