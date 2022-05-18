@@ -22,26 +22,30 @@ interface FormInfo {
   role: string;
   salaryMin: string;
   salaryMax: string;
-  other: boolean;
+  other: string;
   remote: true;
 }
 
+const DEFAULT_FORM_INFO: FormInfo = {
+  name: '',
+  email: '',
+  agency: '',
+  company: '',
+  role: '',
+  salaryMin: '',
+  salaryMax: '',
+  other: '',
+  remote: true,
+};
+
 const PdfGuard = () => {
-  const [info, setInfo] = useState<FormInfo>({
-    name: '',
-    email: '',
-    agency: '',
-    company: '',
-    role: '',
-    salaryMin: '',
-    salaryMax: '',
-    other: false,
-    remote: true,
-  });
+  const [info, setInfo] = useState<FormInfo>(DEFAULT_FORM_INFO);
 
   const [errors, setErrors] = useState<Partial<Record<keyof FormInfo, string>>>({});
+  const [submitDisabled, setSubmitDisabled] = useState(true);
 
   const patchInfo = <T extends keyof FormInfo>(key: T, value: unknown) => {
+    setSubmitDisabled(false);
     setErrors((currentErrors) => ({
       ...currentErrors,
       [key]: null,
@@ -54,6 +58,7 @@ const PdfGuard = () => {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+    setSubmitDisabled(true);
     const submitResp = await fetch('/api/pdf-guard/submit', {
       method: 'POST',
       body: JSON.stringify(info),
@@ -61,6 +66,7 @@ const PdfGuard = () => {
 
     if (submitResp.status === 400) {
       setErrors(await submitResp.json());
+      setSubmitDisabled(false);
     } else {
       const { token = '', id = '' } = await submitResp.json();
       const resp = await fetch('/api/pdf-guard/pdf', {
@@ -74,6 +80,7 @@ const PdfGuard = () => {
       const pdfBuffer = encode(pdfUtf8, 'ISO-8859-1');
 
       const blob = new Blob([pdfBuffer], { type: 'application/pdf' });
+      setSubmitDisabled(false);
 
       window.open(window.URL.createObjectURL(blob), '_blank');
     }
@@ -191,7 +198,7 @@ const PdfGuard = () => {
         <P sz="sm">
           Please email me at <strong>simongold.in at gmail</strong> with any questions.
         </P>
-        <Button sz="lg" type="submit" css={{ alignSelf: 'end' }}>
+        <Button sz="lg" type="submit" css={{ alignSelf: 'end' }} disabled={submitDisabled}>
           View document
         </Button>
       </FormContainer>
