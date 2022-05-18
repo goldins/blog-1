@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import {
   Children,
   cloneElement,
@@ -82,7 +83,7 @@ export const Tooltip = ({ children, content, position = 'top' }: TooltipProps) =
   const [contentPositions, setContentPositions] = useState<CSSProperties>({});
 
   const ContentElement = (
-    <Div ref={contentRef} style={contentPositions}>
+    <Div ref={contentRef} css={{ ...contentPositions }}>
       {content}
     </Div>
   );
