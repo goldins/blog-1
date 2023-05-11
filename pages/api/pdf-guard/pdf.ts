@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { verify } from '../2fa/lib';
-import pdfFile from './2022.pdf';
+import pdfFile from './simon-goldin-resume.pdf';
 import { client, q } from '../../../lib/db/client';
 import { COLLECTION } from './consts';
 
